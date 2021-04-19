@@ -1,0 +1,23 @@
+import RequestError from '../../shared/error/RequestError';
+import {Request, Response} from 'express';
+
+class ExpressAdapter {
+  static handle (fn: Function) {
+    return async function (req: Request, res: Response,onError?: (error: RequestError | Error) => void ) {
+      try {
+        console.log("FN",fn);
+        const obj = await fn(req.params, req.body);
+        res.json(obj);
+      } catch (e) {
+        console.error(e);
+        if(e instanceof RequestError){
+          res.status(e.httpStatus).json(e.message);
+        } else {
+          res.status(500).json("Unexpected Error");
+        }
+      }
+    }
+  }
+}
+
+export default ExpressAdapter;

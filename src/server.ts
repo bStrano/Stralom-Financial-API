@@ -1,10 +1,11 @@
-import express from 'express'
+import "reflect-metadata";
 import app from './app';
 
-const port = process.env.PORT || 3007
+
+const port = 3005
 const ip = '0.0.0.0';
 
-// start the Express server
-app.listen( port, () => {
+
+app.listen( port,ip, () => {
   console.log( `Server started at port ${port}` );
 } );
