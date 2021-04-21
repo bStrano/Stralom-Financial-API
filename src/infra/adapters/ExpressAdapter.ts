@@ -1,12 +1,11 @@
-import RequestError from '../../shared/error/RequestError';
+import RequestError from '../../shared/errors/RequestError';
 import {Request, Response} from 'express';
 
 class ExpressAdapter {
-  static handle (fn: Function) {
+  static  handle (fn: Function) {
     return async function (req: Request, res: Response,onError?: (error: RequestError | Error) => void ) {
       try {
-        console.log("FN",fn);
-        const obj = await fn(req.params, req.body);
+        const obj = await fn( {...req.body, ...req.params});
         res.json(obj);
       } catch (e) {
         console.error(e);
