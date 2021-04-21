@@ -26,13 +26,17 @@
     "@types/mongoose": "^5.10.5",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.39",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "babel-jest": "^26.6.3",
+    "eslint": "^7.24.0",
     "jest": "^26.6.3",
     "mongodb-memory-server": "^6.9.6",
     "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.6"
   },
   "scripts": {
+    "lint": "eslint --fix --ext .ts,.js,.jsx .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/server.ts"
   },

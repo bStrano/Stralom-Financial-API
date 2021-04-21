@@ -1,14 +1,12 @@
 import "reflect-metadata"
 import TransactionCategoryService from '../../../useCases/implementations/TransactionCategoryService';
-import TransactionCategoryRepositoryMemory from '../../repositories/memory/TransactionCategoryRepositoryMemory';
 import TransactionCategoryController from '../implementations/TransactionCategoryController';
 import TransactionCategoryRepository from '../../repositories/implementations/TransactionCategoryRepository';
 import TransactionCategory from '../../../entities/TransactionCategory/TransactionCategory';
 import StringUtil from '../../../../../shared/utils/StringUtil';
-import RepositoryNotFound from '../../../../../shared/errors/repository/implementations/RepositoryNotFound';
 import IUpdateCategoryDTO from '../../../mappers/IUpdateCategoryDTO';
 
-const dbHandler = require('../../../../../shared/utils/tests/db-handler');
+import dbHandler from '../../../../../shared/utils/tests/db-handler';
 
 const transactionCategoryController = new TransactionCategoryController(new TransactionCategoryService(new TransactionCategoryRepository()))
 const INITIAL_SETUP_ROWS = 2;
@@ -34,18 +32,18 @@ afterEach(async () => await dbHandler.clearDatabase());
 afterAll(async () => await dbHandler.closeDatabase());
 
 test('TransactionCategory:findAll', async () => {
-    let categories = await transactionCategoryController.findAll();
+    const categories = await transactionCategoryController.findAll();
     expect(categories).toHaveLength(INITIAL_SETUP_ROWS);
-    let firstCategory = categories[0];
+    const firstCategory = categories[0];
     expect(JSON.stringify((firstCategory))).toBe(JSON.stringify(setupCategory1));
 
   }
 )
 
 test('TransactionCategory:save', async () => {
-    let categoryObject = createRandomCategory();
-    let category = await transactionCategoryController.save(categoryObject);
-    let categories = await transactionCategoryController.findAll();
+    const categoryObject = createRandomCategory();
+    const category = await transactionCategoryController.save(categoryObject);
+    const categories = await transactionCategoryController.findAll();
     expect(categories).toHaveLength(INITIAL_SETUP_ROWS + 1);
     expect(category).toBeInstanceOf(TransactionCategory);
     expect(JSON.stringify(category.name)).toBe(JSON.stringify(categoryObject.name));
@@ -57,7 +55,7 @@ test('TransactionCategory:save', async () => {
 test('TransactionCategory:delete', async () => {
     let categories = await transactionCategoryController.findAll();
     expect(categories).toHaveLength(INITIAL_SETUP_ROWS);
-    let category = {...categories[0]}
+    const category = {...categories[0]}
     if (!category.id) throw Error();
     await transactionCategoryController.delete({id: category.id})
     categories = await transactionCategoryController.findAll();
@@ -66,9 +64,9 @@ test('TransactionCategory:delete', async () => {
 )
 
 test('TransactionCategory:update', async () => {
-    let categoryUpdate = createRandomCategory();
+    const categoryUpdate = createRandomCategory();
     let categories = await transactionCategoryController.findAll();
-    let category = {...categories[1]}
+    const category = {...categories[1]}
     if (!category.id) throw Error();
 
     category.icon = categoryUpdate.icon;
@@ -77,7 +75,7 @@ test('TransactionCategory:update', async () => {
     await transactionCategoryController.update(<IUpdateCategoryDTO> category);
 
     categories = await transactionCategoryController.findAll();
-    let categoryUpdated = {...categories[1]}
+    const categoryUpdated = {...categories[1]}
 
     expect(JSON.stringify(category)).toBe(JSON.stringify(categoryUpdated));
   }

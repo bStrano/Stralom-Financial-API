@@ -1,9 +1,9 @@
 import {Router} from 'express';
-
-const router = Router();
 import transactionRouter from "./application/Transactions/adapters/routes"
 
-router.all("/test",((req, res, next) => {
+const router = Router();
+
+router.all("/test",((req, res) => {
   console.log("Test: OK")
   return res.status(200).send()
 }))

@@ -1,7 +1,7 @@
 import {Container} from 'inversify';
 import containerTransactionCategory from '../../application/Transactions/config/inversify.config';
 
-let container = new Container();
+const container = new Container();
 container.load(containerTransactionCategory);
 
 

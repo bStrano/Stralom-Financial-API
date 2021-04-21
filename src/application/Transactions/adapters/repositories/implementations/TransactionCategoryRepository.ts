@@ -14,19 +14,19 @@ class TransactionCategoryRepository implements ITransactionCategoryRepository{
   }
 
   async findAll(): Promise<TransactionCategory[]> {
-    let categories = await TransactionCategoryCollection.find();
+    const categories = await TransactionCategoryCollection.find();
     return categories.map( (category) => {
       return new TransactionCategory({...category.toObject(), id: category._id.toString()})
     })
   }
 
   async save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory> {
-    let category = await TransactionCategoryCollection.create(transactionCategory)
+    const category = await TransactionCategoryCollection.create(transactionCategory)
     return new TransactionCategory({...category.toObject(), id: category._id.toString()})
   }
 
   async update(transactionCategory: IUpdateCategoryDTO): Promise<void> {
-    let category = await TransactionCategoryCollection.findOneAndUpdate({_id: transactionCategory.id},transactionCategory)
+    const category = await TransactionCategoryCollection.findOneAndUpdate({_id: transactionCategory.id},transactionCategory)
     if(!category) throw new RepositoryNotFound()
     new TransactionCategory({...category.toObject(), id: category._id.toString()})
   }

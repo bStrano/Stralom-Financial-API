@@ -1,14 +1,12 @@
-// tests/db-handler.js
-
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+import mongoose from 'mongoose'
+import {MongoMemoryServer} from 'mongodb-memory-server'
 
 const mongod = new MongoMemoryServer();
 
 /**
  * Connect to the in-memory database.
  */
-module.exports.connect = async () => {
+async function connect():Promise<void>{
     const uri = await mongod.getUri()
 
     const mongooseOpts = {
@@ -23,7 +21,7 @@ module.exports.connect = async () => {
 /**
  * Drop database, close the connection and stop mongod.
  */
-module.exports.closeDatabase = async () => {
+async function closeDatabase():Promise<void>{
     await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
     await mongod.stop();
@@ -32,11 +30,13 @@ module.exports.closeDatabase = async () => {
 /**
  * Remove all the data for all db collections.
  */
-module.exports.clearDatabase = async () => {
+async function clearDatabase() :Promise<void> {
     const collections = mongoose.connection.collections;
 
     for (const key in collections) {
         const collection = collections[key];
-        await collection.deleteMany();
+        await collection.deleteMany({});
     }
 }
+
+export default {connect, closeDatabase, clearDatabase}
