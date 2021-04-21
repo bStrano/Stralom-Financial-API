@@ -3,6 +3,9 @@ import TransactionCategory from '../../entities/TransactionCategory/TransactionC
 import ITransactionCategoryRepository from '../../adapters/repositories/ITransactionCategoryRepository';
 import {inject, injectable} from 'inversify';
 import Symbols from '../../config/Symbols';
+import ISaveCategoryDTO from '../../mappers/ISaveCategoryDTO';
+import IDeleteCategoryDTO from '../../mappers/IDeleteCategoryDTO';
+import IUpdateCategoryDTO from '../../mappers/IUpdateCategoryDTO';
 
 
 @injectable()
@@ -15,18 +18,20 @@ class TransactionCategoryService implements ITransactionCategoryService {
   }
 
 
-  delete(id: number): Promise<void> {
-    throw new Error("Not implemented yet")
+  async delete(transactionCategory: IDeleteCategoryDTO): Promise<void> {
+    await this.repository.delete(transactionCategory.id);
   }
 
   async findAll(): Promise<TransactionCategory[]> {
-    let res = await this.repository.findAll();
-    console.log(res);
-    return res;
+    return await this.repository.findAll();
   }
 
-  save(): Promise<TransactionCategory> {
-    throw new Error("Not implemented yet")
+  async save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory> {
+    return  await this.repository.save(transactionCategory);
+  }
+
+  async update(transactionCategory: IUpdateCategoryDTO): Promise<void> {
+    await this.repository.update(transactionCategory);
   }
 
 

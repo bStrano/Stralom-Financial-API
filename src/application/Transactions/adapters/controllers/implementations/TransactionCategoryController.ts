@@ -3,6 +3,9 @@ import TransactionCategory from '../../../entities/TransactionCategory/Transacti
 import {inject, injectable} from 'inversify';
 import Symbols from '../../../config/Symbols';
 import ITransactionCategoryService from '../../../useCases/ITransactionCategoryService';
+import ISaveCategoryDTO from '../../../mappers/ISaveCategoryDTO';
+import IDeleteCategoryDTO from '../../../mappers/IDeleteCategoryDTO';
+import IUpdateCategoryDTO from '../../../mappers/IUpdateCategoryDTO';
 
 @injectable()
 class TransactionCategoryController implements ITransactionCategoryController {
@@ -10,22 +13,25 @@ class TransactionCategoryController implements ITransactionCategoryController {
 
 
   constructor(
-    @inject(Symbols.ITransactionCategoryService) service: ITransactionCategoryService
+    @inject(Symbols.TransactionCategoryService) service: ITransactionCategoryService
   ) {
-    console.log("Repository", Symbols.ITransactionCategoryService,service);
       this._service = service;
   }
 
-  delete(id: number): Promise<void> {
-    return this._service.delete(id);
+  async delete(transactionCategory: IDeleteCategoryDTO): Promise<void> {
+    return await this._service.delete(transactionCategory);
   }
 
-  findAll(): Promise<TransactionCategory[]> {
-    return  this._service.findAll();
+  async findAll(): Promise<TransactionCategory[]> {
+    return await this._service.findAll();
   }
 
-  save(): Promise<TransactionCategory> {
-    return this._service.save();
+  async save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory> {
+    return this._service.save(transactionCategory);
+  }
+
+  async update(transactionCategory: IUpdateCategoryDTO): Promise<void> {
+    await this._service.update(transactionCategory);
   }
 
 

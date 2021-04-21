@@ -1,8 +1,11 @@
 import TransactionCategory from '../../entities/TransactionCategory/TransactionCategory';
+import ISaveCategoryDTO from '../../mappers/ISaveCategoryDTO';
+import IUpdateCategoryDTO from '../../mappers/IUpdateCategoryDTO';
 
 interface ITransactionCategoryRepository {
-  save(): Promise<TransactionCategory>;
-  delete(id: number): Promise<void>;
+  save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory>;
+  update(transactionCategory: IUpdateCategoryDTO): Promise<void>;
+  delete(id: string): Promise<void>;
   findAll() : Promise<TransactionCategory[]>;
 }
 
