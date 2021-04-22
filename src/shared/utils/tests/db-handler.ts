@@ -12,7 +12,7 @@ async function connect():Promise<void>{
     const mongooseOpts = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: false
+        useFindAndModify: false,
     };
 
     await mongoose.connect(uri, mongooseOpts);

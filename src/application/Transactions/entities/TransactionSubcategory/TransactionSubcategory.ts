@@ -1,11 +1,13 @@
 class TransactionSubcategory{
-  private readonly id?: string;
-  private name: string;
+  readonly id?: string;
+  name: string;
+  user: number;
 
 
   constructor(props: TransactionSubcategory) {
     this.id = props.id;
     this.name = props.name;
+    this.user = props.user;
   }
 }
 
