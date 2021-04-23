@@ -1,7 +1,7 @@
 import TransactionCategory from '../../entities/TransactionCategory/TransactionCategory';
-import ISaveCategoryDTO from '../../mappers/ISaveCategoryDTO';
-import IDeleteCategoryDTO from '../../mappers/IDeleteCategoryDTO';
-import IUpdateCategoryDTO from '../../mappers/IUpdateCategoryDTO';
+import ISaveCategoryDTO from '../../mappers/TransactionCategory/ISaveCategoryDTO';
+import IDeleteCategoryDTO from '../../mappers/TransactionCategory/IDeleteCategoryDTO';
+import IUpdateCategoryDTO from '../../mappers/TransactionCategory/IUpdateCategoryDTO';
 
 interface ITransactionCategoryController {
   save(transactionCategory: ISaveCategoryDTO):Promise<TransactionCategory>,

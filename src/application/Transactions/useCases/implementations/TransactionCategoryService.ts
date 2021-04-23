@@ -3,9 +3,9 @@ import TransactionCategory from '../../entities/TransactionCategory/TransactionC
 import ITransactionCategoryRepository from '../../adapters/repositories/ITransactionCategoryRepository';
 import {inject, injectable} from 'inversify';
 import Symbols from '../../config/Symbols';
-import ISaveCategoryDTO from '../../mappers/ISaveCategoryDTO';
-import IDeleteCategoryDTO from '../../mappers/IDeleteCategoryDTO';
-import IUpdateCategoryDTO from '../../mappers/IUpdateCategoryDTO';
+import ISaveCategoryDTO from '../../mappers/TransactionCategory/ISaveCategoryDTO';
+import IDeleteCategoryDTO from '../../mappers/TransactionCategory/IDeleteCategoryDTO';
+import IUpdateCategoryDTO from '../../mappers/TransactionCategory/IUpdateCategoryDTO';
 
 
 @injectable()

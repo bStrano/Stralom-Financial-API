@@ -2,8 +2,8 @@ import TransactionCategory from '../../../entities/TransactionCategory/Transacti
 import ITransactionCategoryRepository from '../ITransactionCategoryRepository';
 import {injectable} from 'inversify';
 import TransactionCategoryCollection from '../../../infra/database/mongodb/TransactionCategory';
-import ISaveCategoryDTO from '../../../mappers/ISaveCategoryDTO';
-import IUpdateCategoryDTO from '../../../mappers/IUpdateCategoryDTO';
+import ISaveCategoryDTO from '../../../mappers/TransactionCategory/ISaveCategoryDTO';
+import IUpdateCategoryDTO from '../../../mappers/TransactionCategory/IUpdateCategoryDTO';
 import RepositoryNotFound from '../../../../../shared/errors/repository/implementations/RepositoryNotFound';
 
 @injectable()

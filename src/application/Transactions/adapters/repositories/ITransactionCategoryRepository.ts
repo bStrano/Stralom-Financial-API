@@ -1,6 +1,6 @@
 import TransactionCategory from '../../entities/TransactionCategory/TransactionCategory';
-import ISaveCategoryDTO from '../../mappers/ISaveCategoryDTO';
-import IUpdateCategoryDTO from '../../mappers/IUpdateCategoryDTO';
+import ISaveCategoryDTO from '../../mappers/TransactionCategory/ISaveCategoryDTO';
+import IUpdateCategoryDTO from '../../mappers/TransactionCategory/IUpdateCategoryDTO';
 
 interface ITransactionCategoryRepository {
   save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory>;
