@@ -5,12 +5,13 @@ import TransactionCategoryRepository from '../../repositories/implementations/Tr
 import TransactionCategory from '../../../entities/TransactionCategory/TransactionCategory';
 import StringUtil from '../../../../../shared/utils/StringUtil';
 
-import dbHandler from '../../../../../shared/utils/tests/db-handler';
+import dbHandler from '../../../../../shared/infra/databases/mongodb/memory/db-handler';
 import TransactionSubcategoryController from '../implementations/TransactionSubcategoryController';
 import TransactionSubcategoryService from '../../../useCases/implementations/TransactionSubcategoryService';
 import TransactionSubcategoryRepository from '../../repositories/implementations/TransactionSubcategoryRepository';
 import TransactionSubcategory from '../../../entities/TransactionSubcategory/TransactionSubcategory';
 import IUpdateSubcategoryDTO from '../../../mappers/TransactionSubcategory/IUpdateSubcategoryDTO';
+import IDeleteSubcategoryDTO from '../../../mappers/TransactionSubcategory/IDeleteSubcategoryDTO';
 
 const transactionCategoryController = new TransactionCategoryController(new TransactionCategoryService(new TransactionCategoryRepository()))
 const transactionSubcategoryController = new TransactionSubcategoryController(new TransactionSubcategoryService(new TransactionSubcategoryRepository()))
@@ -22,17 +23,15 @@ export const createRandomCategory = (): TransactionCategory => {
     icon: Number(StringUtil.randomString(3, 'n'))
   }
 }
-
-let setupCategory1 = createRandomCategory();
-let setupCategory2 = createRandomCategory();
-
-export const createRandomSubcategory = (): TransactionSubcategory => {
+export const createRandomSubcategory = (id?: string): TransactionSubcategory => {
   return {
+    id,
     name: StringUtil.randomString(10),
     user: 2
   }
 }
-
+let setupCategory1 = createRandomCategory();
+let setupCategory2 = createRandomCategory();
 let setupSubcategory1 = createRandomSubcategory();
 let setupSubcategory2 = createRandomSubcategory();
 let setupSubcategory3 = createRandomSubcategory();
@@ -73,43 +72,33 @@ describe('TransactionSubcategory', () => {
 
   test('save', async () => {
       const subcategoryObject = createRandomSubcategory();
-      const subcategories = await transactionSubcategoryController.findAll();
-      expect(subcategories).toHaveLength(INITIAL_SETUP_ROWS);
+
       const subcategory = await transactionSubcategoryController.save({
         ...subcategoryObject,
         category: <string>setupCategory1.id
       });
       expect(subcategory).toBeInstanceOf(TransactionSubcategory);
       expect(typeof subcategory.id === 'string').toBeTruthy();
-      expect(JSON.stringify(subcategory)).toBe(JSON.stringify({id: subcategory.id, ...subcategoryObject}));
+      expect(subcategory).toMatchObject({...subcategoryObject, id: subcategory.id});
     }
   )
 
 
   test('delete', async () => {
-      let subcategories = await transactionSubcategoryController.findAll();
-      expect(subcategories).toHaveLength(INITIAL_SETUP_ROWS);
-      const subcategory = {...subcategories[0]}
-      if (!subcategory.id) throw Error();
-      await transactionSubcategoryController.delete({id: subcategory.id})
-      subcategories = await transactionSubcategoryController.findAll();
+      await transactionSubcategoryController.delete(<IDeleteSubcategoryDTO>{id: setupSubcategory1.id})
+      const subcategories = await transactionSubcategoryController.findAll();
       expect(subcategories).toHaveLength(INITIAL_SETUP_ROWS - 1);
     }
   )
 
   test('update', async () => {
-      const subcategoryObject = createRandomSubcategory();
-      let subcategories = await transactionSubcategoryController.findAll();
-      const subcategory = {...subcategories[1]}
-      if (!subcategory.id) throw Error();
-      subcategory.name = subcategoryObject.name;
-      await transactionCategoryController.update(<IUpdateSubcategoryDTO>subcategory);
-
-      subcategories = await transactionSubcategoryController.findAll();
+      const subcategoryObject = createRandomSubcategory(setupSubcategory2.id);
+      await transactionSubcategoryController.update(<IUpdateSubcategoryDTO>subcategoryObject);
+      const subcategories = await transactionSubcategoryController.findAll();
       const categoryUpdated = {...subcategories[1]}
 
-
-      expect(JSON.stringify(subcategory)).toBe(JSON.stringify(categoryUpdated));
+      console.log(subcategoryObject,categoryUpdated)
+      expect(subcategoryObject).toMatchObject(categoryUpdated);
     }
   )
 })

@@ -1,35 +1,26 @@
 import TransactionCategory from '../../../entities/TransactionCategory/TransactionCategory';
-import ITransactionCategoryRepository from '../ITransactionCategoryRepository';
 import {injectable} from 'inversify';
-import TransactionCategoryCollection from '../../../infra/database/mongodb/TransactionCategory';
-import ISaveCategoryDTO from '../../../mappers/TransactionCategory/ISaveCategoryDTO';
-import IUpdateCategoryDTO from '../../../mappers/TransactionCategory/IUpdateCategoryDTO';
-import RepositoryNotFound from '../../../../../shared/errors/repository/implementations/RepositoryNotFound';
+
+import TransactionCategoryCollection, {ITransactionCategorySchema} from '../../../../Transactions/infra/database/mongodb/TransactionCategory'
+import GenericRepository from '../../../../../shared/adapters/repositories/GenericRepository';
+import * as mongoose from 'mongoose';
 
 @injectable()
-class TransactionCategoryRepository implements ITransactionCategoryRepository{
+class TransactionCategoryRepository extends GenericRepository<TransactionCategory, ITransactionCategorySchema> {
 
-  async delete(id: string): Promise<void> {
-    await TransactionCategoryCollection.deleteOne({_id: id});
+
+  constructor() {
+    super();
   }
 
-  async findAll(): Promise<TransactionCategory[]> {
-    const categories = await TransactionCategoryCollection.find();
-    return categories.map( (category) => {
-      return new TransactionCategory({...category.toObject(), id: category._id.toString()})
-    })
+  instantiateObject(props: TransactionCategory): TransactionCategory {
+    return new TransactionCategory(props);
   }
 
-  async save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory> {
-    const category = await TransactionCategoryCollection.create(transactionCategory)
-    return new TransactionCategory({...category.toObject(), id: category._id.toString()})
+  getCollection(): mongoose.Model<ITransactionCategorySchema> {
+    return TransactionCategoryCollection;
   }
 
-  async update(transactionCategory: IUpdateCategoryDTO): Promise<void> {
-    const category = await TransactionCategoryCollection.findOneAndUpdate({_id: transactionCategory.id},transactionCategory)
-    if(!category) throw new RepositoryNotFound()
-    new TransactionCategory({...category.toObject(), id: category._id.toString()})
-  }
 
 }
 

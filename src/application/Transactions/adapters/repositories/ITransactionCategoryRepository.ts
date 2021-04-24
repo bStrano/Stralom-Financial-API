@@ -1,12 +1,8 @@
+import GenericRepository from '../../../../shared/adapters/repositories/GenericRepository';
 import TransactionCategory from '../../entities/TransactionCategory/TransactionCategory';
-import ISaveCategoryDTO from '../../mappers/TransactionCategory/ISaveCategoryDTO';
-import IUpdateCategoryDTO from '../../mappers/TransactionCategory/IUpdateCategoryDTO';
+import {ITransactionCategorySchema} from '../../infra/database/mongodb/TransactionCategory';
 
-interface ITransactionCategoryRepository {
-  save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory>;
-  update(transactionCategory: IUpdateCategoryDTO): Promise<void>;
-  delete(id: string): Promise<void>;
-  findAll() : Promise<TransactionCategory[]>;
-}
+
+type ITransactionCategoryRepository = GenericRepository<TransactionCategory, ITransactionCategorySchema>
 
 export default ITransactionCategoryRepository;

@@ -6,7 +6,7 @@ import TransactionCategory from '../../../entities/TransactionCategory/Transacti
 import StringUtil from '../../../../../shared/utils/StringUtil';
 import IUpdateCategoryDTO from '../../../mappers/TransactionCategory/IUpdateCategoryDTO';
 
-import dbHandler from '../../../../../shared/utils/tests/db-handler';
+import dbHandler from '../../../../../shared/infra/databases/mongodb/memory/db-handler';
 
 const transactionCategoryController = new TransactionCategoryController(new TransactionCategoryService(new TransactionCategoryRepository()))
 const INITIAL_SETUP_ROWS = 2;
