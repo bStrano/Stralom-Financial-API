@@ -1,8 +1,10 @@
 import RequestError from '../../shared/errors/RequestError';
 import {Request, Response} from 'express';
 
+type ExpressCallback = (data: any) => any;
+
 class ExpressAdapter {
-  static  handle (fn: (data:unknown) => unknown ) {
+  static  handle (fn: ExpressCallback ) {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     return async function (req: Request, res: Response,onError?: (error: RequestError | Error) => void ) {
       try {

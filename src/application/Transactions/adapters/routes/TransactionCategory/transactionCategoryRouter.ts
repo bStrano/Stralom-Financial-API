@@ -10,10 +10,10 @@ const router = express.Router();
 
 const transactionController = container.get<ITransactionCategoryController>(Symbols.TransactionCategoryController)
 
-router.get('/', ExpressAdapter.handle(async () =>  await transactionController.findAll() ));
-router.post('/', ExpressAdapter.handle(async (data: any) => transactionController.save(data)));
-router.delete('/:id', ExpressAdapter.handle(async (data: any) => transactionController.delete(data)));
-router.patch('/:id', ExpressAdapter.handle(async (data: any) => transactionController.update(data)));
+router.get('/', ExpressAdapter.handle(transactionController.findAll.bind(transactionController)));
+router.post('/', ExpressAdapter.handle(transactionController.save.bind(transactionController)));
+router.delete('/:id', ExpressAdapter.handle(transactionController.delete.bind(transactionController)));
+router.patch('/:id', ExpressAdapter.handle(transactionController.update.bind(transactionController)));
 
 
 export default router;
