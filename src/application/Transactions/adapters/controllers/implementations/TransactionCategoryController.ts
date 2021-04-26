@@ -6,6 +6,7 @@ import ITransactionCategoryService from '../../../useCases/ITransactionCategoryS
 import ISaveCategoryDTO from '../../../mappers/TransactionCategory/ISaveCategoryDTO';
 import IDeleteCategoryDTO from '../../../mappers/TransactionCategory/IDeleteCategoryDTO';
 import IUpdateCategoryDTO from '../../../mappers/TransactionCategory/IUpdateCategoryDTO';
+import TransactionCategoryValidator from '../validators/TransactionCategoryValidator';
 
 @injectable()
 class TransactionCategoryController implements ITransactionCategoryController {
@@ -19,6 +20,7 @@ class TransactionCategoryController implements ITransactionCategoryController {
   }
 
   async delete(transactionCategory: IDeleteCategoryDTO): Promise<void> {
+    await TransactionCategoryValidator.validateDelete(transactionCategory);
     return await this._service.delete(transactionCategory);
   }
 
@@ -27,11 +29,13 @@ class TransactionCategoryController implements ITransactionCategoryController {
   }
 
   async save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory> {
-    return this._service.save(transactionCategory);
+      await TransactionCategoryValidator.validateSave(transactionCategory);
+      return this._service.save(transactionCategory);
   }
 
-  async update(transactionCategory: IUpdateCategoryDTO): Promise<void> {
-    await this._service.update(transactionCategory);
+  async update(transactionCategory: IUpdateCategoryDTO): Promise<TransactionCategory> {
+    await TransactionCategoryValidator.validateUpdate(transactionCategory);
+    return this._service.update(transactionCategory);
   }
 
 

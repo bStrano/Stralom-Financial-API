@@ -30,11 +30,11 @@ abstract class GenericRepository<T,Z extends mongoose.Document>{
     return this.instantiateObject({...objectValue.toObject(), id: objectValue._id.toString()})
   }
 
-  async update(objectParams: unknown): Promise<void> {
-
+  async update(objectParams: unknown): Promise<T> {
     // @ts-ignore
     const objectValue = await this.collection.findOneAndUpdate({_id: objectParams.id},objectParams,{new: true})
     if(!objectValue) throw new RepositoryNotFound()
+    return this.instantiateObject({...objectValue.toObject(), id: objectValue._id})
     // this.instantiateObject({...subcategory.toObject(), id: subcategory._id.toString()})
   }
 

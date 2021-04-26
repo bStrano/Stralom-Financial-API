@@ -30,8 +30,8 @@ class TransactionCategoryService implements ITransactionCategoryService {
     return  await this.repository.save(transactionCategory);
   }
 
-  async update(transactionCategory: IUpdateCategoryDTO): Promise<void> {
-    await this.repository.update(transactionCategory);
+  async update(transactionCategory: IUpdateCategoryDTO): Promise<TransactionCategory> {
+    return await this.repository.update(transactionCategory);
   }
 
 

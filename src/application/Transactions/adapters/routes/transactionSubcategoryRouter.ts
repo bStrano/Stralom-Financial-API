@@ -1,9 +1,9 @@
 import express from 'express';
-import ExpressAdapter from '../../../../../infra/adapters/ExpressAdapter';
+import ExpressAdapter from '../../../../shared/adapters/ExpressAdapter';
 
-import Symbols from '../../../config/Symbols';
-import container from '../../../../../infra/config/inversify.config';
-import ITransactionSubcategoryController from '../../controllers/ITransactionSubcategoryController';
+import Symbols from '../../config/Symbols';
+import container from '../../../../infra/config/inversify.config';
+import ITransactionSubcategoryController from '../controllers/ITransactionSubcategoryController';
 
 
 const router = express.Router();

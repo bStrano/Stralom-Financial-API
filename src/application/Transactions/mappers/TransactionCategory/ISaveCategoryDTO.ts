@@ -3,5 +3,4 @@ interface ISaveCategoryDTO{
   icon: number,
   color: string,
 }
-
 export default ISaveCategoryDTO;

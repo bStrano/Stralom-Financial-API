@@ -1,6 +1,6 @@
 import express from 'express';
-import transactionCategoryRouter from './TransactionCategory/transactionCategoryRouter';
-import transactionSubcategoryRouter from './TransactionSubcategory/transactionSubcategoryRouter';
+import transactionCategoryRouter from './transactionCategoryRouter';
+import transactionSubcategoryRouter from './transactionSubcategoryRouter';
 
 const router = express.Router();
 

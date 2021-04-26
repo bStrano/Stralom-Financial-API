@@ -5,7 +5,7 @@ import IUpdateCategoryDTO from '../mappers/TransactionCategory/IUpdateCategoryDT
 
 interface ITransactionCategoryService{
   save(transactionCategory: ISaveCategoryDTO):Promise<TransactionCategory>,
-  update(transactionCategory: IUpdateCategoryDTO):Promise<void>,
+  update(transactionCategory: IUpdateCategoryDTO):Promise<TransactionCategory>,
   delete(transactionCategory: IDeleteCategoryDTO):Promise<void>;
   findAll():Promise<TransactionCategory[]>;
 }
