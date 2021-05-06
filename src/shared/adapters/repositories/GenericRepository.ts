@@ -14,6 +14,7 @@ abstract class GenericRepository<T,Z extends mongoose.Document>{
   }
 
   async delete(id: string): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await this.collection.deleteOne({_id: id});
   }
@@ -31,10 +32,11 @@ abstract class GenericRepository<T,Z extends mongoose.Document>{
   }
 
   async update(objectParams: unknown): Promise<T> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const objectValue = await this.collection.findOneAndUpdate({_id: objectParams.id},objectParams,{new: true})
     if(!objectValue) throw new RepositoryNotFound()
-    return this.instantiateObject({...objectValue.toObject(), id: objectValue._id})
+    return this.instantiateObject({...objectValue.toObject(), id: objectValue._id.toString()})
     // this.instantiateObject({...subcategory.toObject(), id: subcategory._id.toString()})
   }
 

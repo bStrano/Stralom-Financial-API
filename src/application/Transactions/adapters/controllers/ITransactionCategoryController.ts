@@ -7,7 +7,7 @@ interface ITransactionCategoryController {
   save(transactionCategory: ISaveCategoryDTO):Promise<TransactionCategory>,
   update(transactionCategory: IUpdateCategoryDTO):Promise<TransactionCategory>,
   delete(id: IDeleteCategoryDTO):Promise<void>;
-  findAll():Promise<TransactionCategory[]>;
+  findAll(subcategories: boolean):Promise<TransactionCategory[]>;
 }
 
 export default ITransactionCategoryController;

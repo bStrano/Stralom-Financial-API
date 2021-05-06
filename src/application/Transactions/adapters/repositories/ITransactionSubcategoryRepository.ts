@@ -3,6 +3,6 @@ import GenericRepository from '../../../../shared/adapters/repositories/GenericR
 import {ITransactionSubcategorySchema} from '../../infra/database/mongodb/TransactionSubcategory';
 
 
-type ITransactionCategoryRepository = GenericRepository<TransactionSubcategory,ITransactionSubcategorySchema>
+type ITransactionSubcategoryRepository = GenericRepository<TransactionSubcategory,ITransactionSubcategorySchema>
 
-export default ITransactionCategoryRepository;
+export default ITransactionSubcategoryRepository;

@@ -8,6 +8,7 @@ interface ITransactionCategoryService{
   update(transactionCategory: IUpdateCategoryDTO):Promise<TransactionCategory>,
   delete(transactionCategory: IDeleteCategoryDTO):Promise<void>;
   findAll():Promise<TransactionCategory[]>;
+  findAllWithSubcategories():Promise<TransactionCategory[]>;
 }
 
 export default ITransactionCategoryService;

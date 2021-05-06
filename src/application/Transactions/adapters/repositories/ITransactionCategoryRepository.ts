@@ -3,6 +3,7 @@ import TransactionCategory from '../../entities/TransactionCategory/TransactionC
 import {ITransactionCategorySchema} from '../../infra/database/mongodb/TransactionCategory';
 
 
-type ITransactionCategoryRepository = GenericRepository<TransactionCategory, ITransactionCategorySchema>
-
+interface ITransactionCategoryRepository extends GenericRepository<TransactionCategory,ITransactionCategorySchema>{
+  findAllWithSubcategories: () => Promise<TransactionCategory[]>;
+}
 export default ITransactionCategoryRepository;

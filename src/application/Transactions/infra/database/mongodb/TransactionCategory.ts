@@ -1,5 +1,5 @@
-import {Document, Schema} from 'mongoose';
 import * as mongoose from 'mongoose';
+import {Document, Schema} from 'mongoose';
 
 export interface ITransactionCategorySchema extends Document{
   _id: string,
@@ -14,7 +14,7 @@ const transactionCategorySchema = new Schema({
   name: {type: String, required: true},
   icon: {type: Number, required: true},
   color: {type: String, required: true},
-  user: {type: Schema.Types.ObjectId}
+  user: {type: Schema.Types.ObjectId},
 })
 
 

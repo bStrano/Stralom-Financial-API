@@ -34,6 +34,10 @@ class TransactionCategoryService implements ITransactionCategoryService {
     return await this.repository.update(transactionCategory);
   }
 
+  async findAllWithSubcategories(): Promise<TransactionCategory[]> {
+    return await this.repository.findAllWithSubcategories();
+  }
+
 
 }
 

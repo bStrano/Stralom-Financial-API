@@ -24,8 +24,12 @@ class TransactionCategoryController implements ITransactionCategoryController {
     return await this._service.delete(transactionCategory);
   }
 
-  async findAll(): Promise<TransactionCategory[]> {
-    return await this._service.findAll();
+  async findAll(subcategories: boolean): Promise<TransactionCategory[]> {
+    if(subcategories) {
+      return await this._service.findAllWithSubcategories()
+    } else {
+      return await this._service.findAll();
+    }
   }
 
   async save(transactionCategory: ISaveCategoryDTO): Promise<TransactionCategory> {
