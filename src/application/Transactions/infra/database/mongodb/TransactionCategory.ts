@@ -11,10 +11,12 @@ export interface ITransactionCategorySchema extends Document{
 }
 
 const transactionCategorySchema = new Schema({
+  _id: String,
   name: {type: String, required: true},
   icon: {type: Number, required: true},
   color: {type: String, required: true},
   user: {type: Schema.Types.ObjectId},
+  subcategories: [{type: String, ref: 'TransactionSubcategoryCollection'}]
 })
 
 

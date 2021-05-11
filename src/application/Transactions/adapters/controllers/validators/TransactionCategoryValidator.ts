@@ -11,6 +11,7 @@ class TransactionCategoryValidator{
 
   static validateSave(value: ISaveCategoryDTO):  Promise<unknown>{
     const saveCategorySchema = yup.object().shape({
+      _id: yup.string().uuid("UUID required").required('UUID required'),
       name: yup.string().required('Name is required'),
       icon: yup.number().required('Icon ID is required'),
       color: this.colorValidation.required('Color is required in hexadecimal format #123456')

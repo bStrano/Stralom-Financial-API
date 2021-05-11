@@ -22,13 +22,13 @@ abstract class GenericRepository<T,Z extends mongoose.Document>{
   async findAll(): Promise<T[]> {
     const objects = await this.collection.find();
     return objects.map( (objectValue) => {
-      return this.instantiateObject({...objectValue.toObject(), id: objectValue._id.toString()})
+      return this.instantiateObject(objectValue.toObject())
     })
   }
 
   async save(objectParams: unknown): Promise<T> {
-    const objectValue = await this.collection.create(objectParams)
-    return this.instantiateObject({...objectValue.toObject(), id: objectValue._id.toString()})
+    await this.collection.create(objectParams)
+    return this.instantiateObject(objectParams)
   }
 
   async update(objectParams: unknown): Promise<T> {
@@ -36,8 +36,7 @@ abstract class GenericRepository<T,Z extends mongoose.Document>{
     // @ts-ignore
     const objectValue = await this.collection.findOneAndUpdate({_id: objectParams.id},objectParams,{new: true})
     if(!objectValue) throw new RepositoryNotFound()
-    return this.instantiateObject({...objectValue.toObject(), id: objectValue._id.toString()})
-    // this.instantiateObject({...subcategory.toObject(), id: subcategory._id.toString()})
+    return this.instantiateObject(objectValue.toObject())
   }
 
 }

@@ -1,14 +1,14 @@
 import TransactionSubcategory from '../TransactionSubcategory/TransactionSubcategory';
 
 class TransactionCategory{
-   readonly id?: string;
+   readonly _id?: string;
    name: string;
    color: string;
    icon: number;
    subcategories?: TransactionSubcategory[];
 
   constructor(props: TransactionCategory ) {
-    this.id = props.id;
+    this._id = props._id;
     this.name = props.name;
     this.color = props.color;
     this.icon = props.icon;

@@ -3,13 +3,15 @@ import {injectable} from 'inversify';
 
 import TransactionCategoryCollection, {ITransactionCategorySchema} from '../../../../Transactions/infra/database/mongodb/TransactionCategory'
 import GenericRepository from '../../../../../shared/adapters/repositories/GenericRepository';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import ITransactionCategoryRepository from '../ITransactionCategoryRepository';
 import TransactionSubcategoryCollection from '../../../infra/database/mongodb/TransactionSubcategory';
 import TransactionSubcategory from '../../../entities/TransactionSubcategory/TransactionSubcategory';
+import ISaveCategoryDTO from '../../../mappers/TransactionCategory/ISaveCategoryDTO';
+
 
 @injectable()
-class TransactionCategoryRepository extends GenericRepository<TransactionCategory, ITransactionCategorySchema> implements ITransactionCategoryRepository{
+class TransactionCategoryRepository extends GenericRepository<TransactionCategory, ITransactionCategorySchema> implements ITransactionCategoryRepository {
 
 
   constructor() {
@@ -17,22 +19,49 @@ class TransactionCategoryRepository extends GenericRepository<TransactionCategor
   }
 
   instantiateObject(props: TransactionCategory): TransactionCategory {
-    return new TransactionCategory(props);
+    const transactionCategory = new TransactionCategory(props);
+    transactionCategory.subcategories = props.subcategories?.map(item => {
+      return new TransactionSubcategory(item);
+    })
+    return transactionCategory;
   }
 
   getCollection(): mongoose.Model<ITransactionCategorySchema> {
     return TransactionCategoryCollection;
   }
 
+
+  async save(category: ISaveCategoryDTO): Promise<TransactionCategory>  {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const categoryNew = await TransactionCategoryCollection.insertMany([category], {session});
+      category.subcategories.forEach(item => {
+        item.category = categoryNew;
+      })
+      await TransactionSubcategoryCollection.insertMany(category.subcategories.map( item => {
+        return {...item, category: item._id};
+      }), {session});
+      await  session.commitTransaction();
+      return categoryNew;
+    } catch (e) {
+      await session.abortTransaction();
+      throw e;
+    }finally {
+      session.endSession();
+    }
+  }
+
   async findAllWithSubcategories(): Promise<TransactionCategory[]> {
     const categoriesDB = await TransactionCategoryCollection.find();
     const subcategoriesDB = await TransactionSubcategoryCollection.find();
 
-    return categoriesDB.map( item => {
+    return categoriesDB.map(item => {
       const transactionCategory = new TransactionCategory(item);
       transactionCategory.subcategories = subcategoriesDB.filter(subcategory => {
-        return subcategory.category.toString() === transactionCategory.id
-      }).map( item => new TransactionSubcategory(item));
+        return subcategory.category.toString() === transactionCategory._id
+      }).map(item => new TransactionSubcategory(item));
       return transactionCategory;
     })
   }
