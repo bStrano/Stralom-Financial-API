@@ -1,8 +1,8 @@
 import express from 'express';
 import routes from './routes';
 import morgan from 'morgan';
-import './infra/config/typeorm'
-import './infra/config/mongoose'
+import './infra/databases/typeorm'
+import './infra/databases/mongodb/mongoose'
 
 const app = express();
 
