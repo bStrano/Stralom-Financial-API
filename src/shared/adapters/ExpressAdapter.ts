@@ -9,11 +9,14 @@ class ExpressAdapter {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     return async function (req: Request, res: Response,onError?: (error: RequestError | Error) => void ) {
       try {
-        const obj = await fn( {...req.body, ...req.params});
+        const obj = await fn( {...req.body, ...req.params, user: req.user?.id});
 
         res.json(obj);
       } catch (e) {
         console.error(e)
+        if(onError) {
+          onError(e);
+        }
         if(e instanceof RequestError){
           res.status(e.httpStatus).json(e.message);
         } else if ( e instanceof ValidationError) {
