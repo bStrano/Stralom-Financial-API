@@ -6,8 +6,7 @@ export interface ITransactionCategorySchema extends Document{
   name: string,
   icon: number,
   color: string,
-  // TODO: Refactor when the user module is implemented
-  user: string
+  user: number
 }
 
 const transactionCategorySchema = new Schema({
@@ -15,7 +14,7 @@ const transactionCategorySchema = new Schema({
   name: {type: String, required: true},
   icon: {type: Number, required: true},
   color: {type: String, required: true},
-  user: {type: Schema.Types.ObjectId},
+  user: {type: Number, required: true},
   subcategories: [{type: String, ref: 'TransactionSubcategoryCollection'}]
 })
 

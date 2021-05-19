@@ -37,11 +37,8 @@ class TransactionCategoryRepository extends GenericRepository<TransactionCategor
       session.startTransaction();
 
       const categoryNew = await TransactionCategoryCollection.insertMany([category], {session});
-      category.subcategories.forEach(item => {
-        item.category = categoryNew;
-      })
       await TransactionSubcategoryCollection.insertMany(category.subcategories.map( item => {
-        return {...item, category: item._id};
+        return {...item, category: category._id, user: category.user};
       }), {session});
       await  session.commitTransaction();
       return categoryNew;
@@ -60,7 +57,7 @@ class TransactionCategoryRepository extends GenericRepository<TransactionCategor
     return categoriesDB.map(item => {
       const transactionCategory = new TransactionCategory(item);
       transactionCategory.subcategories = subcategoriesDB.filter(subcategory => {
-        return subcategory.category.toString() === transactionCategory._id
+        return subcategory.category === transactionCategory._id
       }).map(item => new TransactionSubcategory(item));
       return transactionCategory;
     })
