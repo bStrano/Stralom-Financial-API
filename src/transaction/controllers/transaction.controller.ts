@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { TransactionService } from '../services/transaction.service';
-import { CreateTransactionDto } from '../dto/create-transaction.dto';
-import { UpdateTransactionDto } from '../dto/update-transaction.dto';
+import { CreateTransactionDto } from '../dto/transaction/create-transaction.dto';
+import { UpdateTransactionDto } from '../dto/transaction/update-transaction.dto';
 
 @Controller('transaction')
 export class TransactionController {
