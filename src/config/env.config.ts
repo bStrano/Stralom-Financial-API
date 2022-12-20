@@ -1,9 +1,5 @@
 const envConfig = {
-  envFilePath: [
-    '.env.development.local',
-    '.env.development',
-    '.env.production',
-  ],
+  envFilePath: ['.env', '.env.development.local', '.env.development', '.env.production'],
   isGlobal: true,
   cache: true,
 };

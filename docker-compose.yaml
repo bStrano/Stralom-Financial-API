@@ -1,0 +1,37 @@
+services:
+  postgres-financial:
+    image: postgres
+    restart: always
+    volumes:
+      - data:/data/db/postgres
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+    ports:
+      - 5432:5432
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  api-financial:
+    working_dir: '/app'
+    build:
+      context: ./
+      dockerfile: Dockerfile-dev
+    restart: always
+    ports:
+      - '3001:3001'
+    volumes:
+      - logs:/app/logs
+      - ./:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    depends_on:
+      - postgres-financial
+volumes:
+  data:
+  logs:
+
