@@ -2,6 +2,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
+    "paths": {
+      "@configs/*": [
+        "src/configs/*"
+      ]
+    },
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -10,6 +15,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true
   }
 }

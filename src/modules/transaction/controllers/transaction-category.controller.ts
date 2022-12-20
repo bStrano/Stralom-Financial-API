@@ -2,8 +2,10 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestj
 import { TransactionCategoryService } from '../services/transaction-category.service';
 import { CreateTransactionCategoryDto } from '../dto/category/create-transaction-category.dto';
 import { UpdateTransactionCategoryDto } from '../dto/category/update-transaction-category.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('transaction-category')
+@ApiTags('Transactions - Categories')
 export class TransactionCategoryController {
   constructor(private readonly transactionCategoryService: TransactionCategoryService) {}
 

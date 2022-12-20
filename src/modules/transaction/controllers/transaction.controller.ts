@@ -2,8 +2,10 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { TransactionService } from '../services/transaction.service';
 import { CreateTransactionDto } from '../dto/transaction/create-transaction.dto';
 import { UpdateTransactionDto } from '../dto/transaction/update-transaction.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('transaction')
+@ApiTags('Transactions')
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 
@@ -23,10 +25,7 @@ export class TransactionController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateTransactionDto: UpdateTransactionDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateTransactionDto: UpdateTransactionDto) {
     return this.transactionService.update(+id, updateTransactionDto);
   }
 
