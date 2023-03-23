@@ -3,12 +3,15 @@ import { TransactionService } from './services/transaction.service';
 import { TransactionController } from './controllers/transaction.controller';
 import { TransactionCategoryService } from './services/transaction-category.service';
 import { TransactionCategoryController } from './controllers/transaction-category.controller';
-import { TransactionCategoryRepository } from './repositories/transaction-category.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TransactionCategory } from './entities/transaction-category.entity';
+import { TransactionCategoryRepository } from './repositories/transaction-category.repository';
+import { Transaction } from './entities/transaction.entity';
+import { TransactionRepository } from './repositories/transaction.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TransactionCategoryRepository])],
+  imports: [TypeOrmModule.forFeature([TransactionCategory, Transaction])],
   controllers: [TransactionController, TransactionCategoryController],
-  providers: [TransactionService, TransactionCategoryService],
+  providers: [TransactionService, TransactionCategoryService, TransactionCategoryRepository, TransactionRepository, TransactionService],
 })
 export class TransactionModule {}

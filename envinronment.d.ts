@@ -4,6 +4,7 @@ declare global {
       ENVIRONMENT: 'HOMOLOG' | 'PROD' | 'LOCAL';
       PORT: string;
       ACCESS_TOKEN_SECRET: string;
+      REFRESH_TOKEN_SECRET: string;
       MONGODB_URL: string;
       TYPEORM_CONNECTION: string;
       TYPEORM_HOST: string;

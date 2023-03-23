@@ -1,20 +1,16 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { TransactionSubcategory } from './transaction-subcategory.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('transactions_categories')
+@Entity('transaction_categories')
 export class TransactionCategory {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ length: 100, unique: true })
-  name: string;
+  id!: string;
 
   @Column()
-  color: string;
+  name!: string;
 
   @Column()
-  icon: number;
+  color!: string;
 
-  @OneToMany(() => TransactionSubcategory, (subcategory) => subcategory.category, { cascade: true })
-  subcategories: TransactionSubcategory[];
+  @Column()
+  icon!: string;
 }

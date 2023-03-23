@@ -24,12 +24,12 @@ export class TransactionCategoryController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.transactionCategoryService.findOne(+id);
+    return this.transactionCategoryService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTransactionCategoryDto: UpdateTransactionCategoryDto) {
-    return this.transactionCategoryService.update(+id, updateTransactionCategoryDto);
+    return this.transactionCategoryService.update(id, updateTransactionCategoryDto);
   }
 
   @Delete(':id')
