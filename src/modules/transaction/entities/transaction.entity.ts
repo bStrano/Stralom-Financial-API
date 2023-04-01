@@ -1,7 +1,8 @@
 import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { TransactionInterface } from '@core/modules/transactions/entities/TransactionInterface';
 import { ApiProperty } from '@nestjs/swagger';
+import { TransactionCategory } from './transaction-category.entity';
 
 @Entity()
 export class Transaction implements TransactionInterface {
@@ -19,4 +20,13 @@ export class Transaction implements TransactionInterface {
   type: TransactionTypeEnum;
   @Column()
   userId: number;
+  @ManyToOne(() => TransactionCategory, { eager: true })
+  @JoinColumn()
+  category: number;
+  @Column({ type: 'timestamptz' })
+  date: Date;
+  @CreateDateColumn()
+  createdAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 }

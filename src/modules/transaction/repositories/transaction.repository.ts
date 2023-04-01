@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Transaction } from '../entities/transaction.entity';
 import { Injectable } from '@nestjs/common';
 
@@ -17,5 +17,9 @@ export class TransactionRepository {
 
   async findAll(userId: number) {
     return this.repository.find({ where: { userId } });
+  }
+
+  async remove(ids: string[]) {
+    return this.repository.delete({ id: In(ids) });
   }
 }

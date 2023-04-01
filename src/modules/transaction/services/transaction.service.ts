@@ -22,7 +22,7 @@ export class TransactionService {
     return `This action updates a #${id} transaction`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  remove(ids: string[]) {
+    return this.transactionRepository.remove(ids);
   }
 }
