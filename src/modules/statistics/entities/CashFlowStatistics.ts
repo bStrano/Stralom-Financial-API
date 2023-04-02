@@ -1,6 +1,7 @@
 import { Expose } from 'class-transformer';
+import { CashFlowStatisticsInterface } from '@core/modules/statistics/CashFlowStatistcs';
 
-export class CashFlowStatistics {
+export class CashFlowStatistics implements CashFlowStatisticsInterface {
   private _values: number[];
   private readonly _current: number;
   private readonly _total: number;

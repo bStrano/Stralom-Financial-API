@@ -2,22 +2,18 @@ import { format, sub } from 'date-fns';
 import { CashFlowCompiledInterface } from '../interfaces/CashFlowCompiledInterface';
 import { Expose } from 'class-transformer';
 import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
+import { CashFlowCompiledSummaryInterface } from '@core/modules/statistics/CashFlowCompiledSummaryInterface';
+import { CashFlowByDayCompiledDaysInterface, CashFlowByDayCompiledInterface } from '@core/modules/statistics/CashFlowByDayCompiledInterface';
 
-interface CashFlowCompiledSummaryInterface {
-  incoming: CashFlowCompiledInterface;
-  outComing: CashFlowCompiledInterface;
-  balance: CashFlowCompiledInterface;
-}
-
-export class CashFlowByDayCompiled {
+export class CashFlowByDayCompiled implements CashFlowByDayCompiledInterface {
   private readonly _daysMap = new Map<string, CashFlowCompiledSummaryInterface>();
-  private readonly dateFrom: Date;
+  private readonly _dateFrom: Date;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-  private readonly dateTo: Date;
+  private readonly _dateTo: Date;
 
   constructor(dateFrom: Date, dateTo: Date, values: CashFlowCompiledInterface[]) {
-    this.dateFrom = dateFrom;
-    this.dateTo = dateTo;
+    this._dateFrom = dateFrom;
+    this._dateTo = dateTo;
     this.setupInitialValues();
     values.forEach((item) => {
       this.add(item);
@@ -74,7 +70,7 @@ export class CashFlowByDayCompiled {
 
   setupInitialValues() {
     let auxDate = new Date();
-    while (auxDate > this.dateFrom) {
+    while (auxDate > this._dateFrom) {
       const key = format(auxDate, 'dd/MM/yyyy');
       this.daysMap.set(key, {
         incoming: {
@@ -111,7 +107,19 @@ export class CashFlowByDayCompiled {
   }
 
   @Expose()
-  get days(): any {
-    return Array.from(this._daysMap);
+  get days(): CashFlowByDayCompiledDaysInterface[] {
+    const data: CashFlowByDayCompiledDaysInterface[] = [];
+    this._daysMap.forEach((value, key) => {
+      data.push({ date: key, data: value });
+    });
+    return data;
+  }
+
+  get dateFrom(): Date {
+    return this._dateFrom;
+  }
+
+  get dateTo(): Date {
+    return this._dateTo;
   }
 }

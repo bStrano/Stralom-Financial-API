@@ -1,7 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { TransactionCategoryInterface } from '@core/modules/transactions/entities/TransactionCategoryInterface';
 
 @Entity('transaction_categories')
-export class TransactionCategory {
+export class TransactionCategory implements TransactionCategoryInterface {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 

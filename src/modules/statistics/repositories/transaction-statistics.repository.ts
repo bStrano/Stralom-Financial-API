@@ -5,6 +5,7 @@ import { Transaction } from '../../transaction/entities/transaction.entity';
 import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
 import { TransactionCategory } from '../../transaction/entities/transaction-category.entity';
 import { CashFlowCompiledInterface } from '../interfaces/CashFlowCompiledInterface';
+import { CashFlowCompiledGroupedByCategoryInterface } from '@core/modules/statistics/CashFlowCompiledGroupedByCategory';
 
 @Injectable()
 export class TransactionStatisticsRepository {
@@ -41,7 +42,7 @@ export class TransactionStatisticsRepository {
     });
   }
 
-  async getCashFlowGroupedByCategory(userId: number, optionalParams?: CashFlowOptionalParams) {
+  async getCashFlowGroupedByCategory(userId: number, optionalParams?: CashFlowOptionalParams): Promise<CashFlowCompiledGroupedByCategoryInterface[]> {
     const queryBuilder = this.dataSource
       .createQueryBuilder()
       .from((subQuery) => {
