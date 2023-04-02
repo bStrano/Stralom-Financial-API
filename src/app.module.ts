@@ -8,9 +8,10 @@ import { ConfigModule } from '@nestjs/config';
 import { typeOrmAsyncConfig } from './config/typeorm.config-nest';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './modules/auth/auth.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(envConfig), TypeOrmModule.forRootAsync(typeOrmAsyncConfig), TransactionModule, AuthModule],
+  imports: [ConfigModule.forRoot(envConfig), TypeOrmModule.forRootAsync(typeOrmAsyncConfig), TransactionModule, AuthModule, StatisticsModule],
   controllers: [AppController],
   providers: [
     // {
