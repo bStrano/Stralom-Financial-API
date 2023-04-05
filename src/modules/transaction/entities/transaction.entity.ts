@@ -22,7 +22,7 @@ export class Transaction implements TransactionInterface {
   userId: number;
   @ManyToOne(() => TransactionCategory, { eager: true })
   @JoinColumn()
-  category: number;
+  category: TransactionCategory;
   @Column({ type: 'timestamptz' })
   date: Date;
   @CreateDateColumn()

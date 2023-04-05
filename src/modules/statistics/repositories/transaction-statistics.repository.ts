@@ -32,6 +32,7 @@ export class TransactionStatisticsRepository {
     console.log(result);
     return result.map((item) => {
       return {
+        accumulated: 0,
         total: Number(item.total),
         quantity: Number(item.quantity),
         year: item.year,
