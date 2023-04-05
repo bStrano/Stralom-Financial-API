@@ -25,9 +25,9 @@ export class CashFlowStatisticsService {
       type: TransactionTypeEnum.incoming,
     });
     return {
-      balance: new CashFlowStatistics(balanceCashFlow.map((item) => Number(item.total))),
-      incoming: new CashFlowStatistics(outComingCashFlow.map((item) => Number(item.total))),
-      outComing: new CashFlowStatistics(incomingFlow.map((item) => Number(item.total))),
+      balance: new CashFlowStatistics(balanceCashFlow),
+      incoming: new CashFlowStatistics(outComingCashFlow),
+      outComing: new CashFlowStatistics(incomingFlow),
     };
   }
 
