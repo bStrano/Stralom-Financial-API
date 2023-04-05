@@ -29,7 +29,6 @@ export class TransactionStatisticsRepository {
     this.applyOptionalFilters(queryBuilder, optionalParams);
 
     const result = await queryBuilder.getRawMany();
-    console.log(result);
     return result.map((item) => {
       return {
         accumulated: 0,

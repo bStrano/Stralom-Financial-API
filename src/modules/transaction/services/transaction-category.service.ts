@@ -15,7 +15,6 @@ export class TransactionCategoryService {
   }
 
   async findAll() {
-    console.log("Find All", this.repository)
     return this.repository.findAll();
   }
 

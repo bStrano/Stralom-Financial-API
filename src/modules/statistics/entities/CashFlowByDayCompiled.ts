@@ -25,7 +25,6 @@ export class CashFlowByDayCompiled implements CashFlowByDayCompiledInterface {
 
     const mapAsc = new Map(
       [...this._daysMap.entries()].sort(([a], [b]) => {
-        console.log(b, a, new Date(b).getTime() - new Date(a).getTime());
         return new Date(a).getTime() - new Date(b).getTime();
       }),
     );
