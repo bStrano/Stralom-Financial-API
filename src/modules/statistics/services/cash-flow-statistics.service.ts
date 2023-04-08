@@ -26,8 +26,8 @@ export class CashFlowStatisticsService {
     });
     return {
       balance: new CashFlowStatistics(balanceCashFlow),
-      incoming: new CashFlowStatistics(outComingCashFlow),
-      outComing: new CashFlowStatistics(incomingFlow),
+      incoming: new CashFlowStatistics(incomingFlow),
+      outComing: new CashFlowStatistics(outComingCashFlow),
     };
   }
 
