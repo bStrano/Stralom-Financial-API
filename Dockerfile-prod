@@ -5,6 +5,7 @@ ENV GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyCheckin
 # Install git and openssh-client for cloning private repos
 RUN apk update && apk upgrade && apk add git openssh-client
 RUN apk add --no-cache gawk ffmpeg
+RUN apk add --no-cache bash
 #
 ## Set up SSH key for private repository access
 ARG SSH_MAIN_PRIVATE_KEY
