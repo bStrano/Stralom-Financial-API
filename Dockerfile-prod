@@ -49,4 +49,4 @@ RUN yarn install
 RUN yarn build
 EXPOSE 3000
 
-CMD './start-application-production.sh'
+CMD ["yarn","start:prod"]
