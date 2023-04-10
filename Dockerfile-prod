@@ -4,43 +4,48 @@ FROM node:alpine
 ENV GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 # Install git and openssh-client for cloning private repos
 RUN apk update && apk upgrade && apk add git openssh-client
+RUN apk add --no-cache gawk ffmpeg
 #
 ## Set up SSH key for private repository access
 ARG SSH_MAIN_PRIVATE_KEY
 ARG SSH_CORE_PRIVATE_KEY
 
-RUN echo "the value is ${SSH_MAIN_PRIVATE_KEY}"
+RUN apk add nano
 ##
 RUN mkdir -p /root/.ssh && \
     chmod 0700 /root/.ssh && \
     ssh-keyscan github.com >> /root/.ssh/known_hosts && \
-    echo "${SSH_MAIN_PRIVATE_KEY}" > /root/.ssh/id_rsa && \
-    echo "${SSH_CORE_PRIVATE_KEY}" > /root/.ssh/sub1_id_rsa && \
-    chmod 0600 /root/.ssh/id_rsa /root/.ssh/sub1_id_rsa
+    echo "${SSH_MAIN_PRIVATE_KEY}" | tr ' ' '\n' > /root/.ssh/id_rsa && \
+    echo "${SSH_CORE_PRIVATE_KEY}" |  tr ' ' '\n' > /root/.ssh/stralom_core_rsa && \
+    echo '/root/.ssh/id_rsa /root/.ssh/stralom_core_rsa' | xargs -n 1 sed -i -e '1s/^/-----BEGIN OPENSSH PRIVATE KEY-----\n/' -e '$s/$/\n-----END OPENSSH PRIVATE KEY-----/' && \
+    chmod 0600 /root/.ssh/id_rsa /root/.ssh/stralom_core_rsa && \
+    eval "$(ssh-agent -s)" && \
+    ssh-add /root/.ssh/id_rsa  && \
+    ssh-add /root/.ssh/stralom_core_rsa
+
+
+RUN echo "Host github.com-stralom-api$ \
+              HostName github.com$ \
+              User git$ \
+              IdentityFile /root/.ssh/id_rsa$ \
+          Host github.com-stralom-core$ \
+              HostName github.com$ \
+              User git$ \
+              IdentityFile /root/.ssh/stralom_core_rsa" |  tr '$' '\n'> /root/.ssh/config
+
+WORKDIR /app
 
 #Clone the private repository with submodules
-WORKDIR /app
-RUN git clone --recurse-submodules git@github.com:bStrano/Stralom-Financial-API.git
+RUN git clone git@github.com:bStrano/Stralom-Financial-API.git .
 
-# Set up SSH key and known_hosts file for submodule access
-RUN cp /root/.ssh/id_rsa /app/.ssh/id_rsa && \
-    cp /root/.ssh/known_hosts /app/.ssh/known_hosts
-
-# Set up SSH key for submodules
-RUN git submodule foreach --recursive 'git config core.sshCommand "ssh -i /root/.ssh/sub1_id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"'
-
-# Initialize and update submodules
-RUN git submodule update --init --recursive
-
-
-RUN cd stralom-financial-api && \
-  git submodule update --init --recursive && \
-  npm install
+RUN sed -i 's/git@github\.com:bStrano\/Stralom-Financial-Core\.git/ssh:\/\/github\.com-stralom-core\/bStrano\/Stralom-Financial-Core\.git/g' .gitmodules
+#
+RUN  git submodule update --init --recursive
+RUN cd libs/stralom-financial-core && git checkout master && git pull
 
 COPY package.json /app
 RUN yarn install
-COPY . /app
-RUN git submodule init && git submodule update
+
 RUN yarn build
 EXPOSE 3000
 
