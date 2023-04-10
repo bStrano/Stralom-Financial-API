@@ -1,4 +1,4 @@
-import { TransactionTypeEnum } from '../../transaction/entities/transaction-type.enum';
+import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
 
 export interface CashFlowCompiledInterface {
   total: number;
