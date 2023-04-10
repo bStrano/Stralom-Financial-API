@@ -18,7 +18,7 @@ RUN mkdir -p /root/.ssh && \
     echo "${SSH_MAIN_PRIVATE_KEY}" | tr ' ' '\n' > /root/.ssh/id_rsa && \
     echo "${SSH_CORE_PRIVATE_KEY}" |  tr ' ' '\n' > /root/.ssh/stralom_core_rsa && \
     echo '/root/.ssh/id_rsa /root/.ssh/stralom_core_rsa' | xargs -n 1 sed -i -e '1s/^/-----BEGIN OPENSSH PRIVATE KEY-----\n/' -e '$s/$/\n-----END OPENSSH PRIVATE KEY-----/' && \
-    chmod 0600 /root/.ssh/id_rsa /root/.ssh/stralom_core_rsa && \
+    chmod 0400 /root/.ssh/id_rsa /root/.ssh/stralom_core_rsa && \
     eval "$(ssh-agent -s)" && \
     ssh-add /root/.ssh/id_rsa  && \
     ssh-add /root/.ssh/stralom_core_rsa
