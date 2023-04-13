@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TransactionStatisticsRepository } from '../repositories/transaction-statistics.repository';
 import { CashFlowStatistics } from '../entities/CashFlowStatistics';
-import { lastDayOfMonth, sub } from 'date-fns';
+import { add, lastDayOfMonth, sub } from 'date-fns';
 import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
 import { CashFlowByDayCompiled } from '../entities/CashFlowByDayCompiled';
 
@@ -33,10 +33,11 @@ export class CashFlowStatisticsService {
 
   async getTransactionsTotalCompiledByDay(userId: number) {
     const today = new Date();
+    const tomorrow = add(today, { days: 1 });
     const dateFrom = sub(today, { days: 31 });
     const result = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, { dateFrom: dateFrom, dateTo: today, groupByDay: true, groupByType: true });
 
-    return new CashFlowByDayCompiled(dateFrom, today, result);
+    return new CashFlowByDayCompiled(dateFrom, tomorrow, result);
   }
 
   async getExpensesTotalCompiledByCategory(userId: number) {
@@ -44,6 +45,6 @@ export class CashFlowStatisticsService {
     const endCurrentMonth = lastDayOfMonth(today);
     const startCurrentMonth = new Date();
     startCurrentMonth.setDate(1);
-    return await this.statisticsRepository.getCashFlowGroupedByCategory(userId, { dateFrom: startCurrentMonth, dateTo: endCurrentMonth });
+    return await this.statisticsRepository.getCashFlowGroupedByCategory(userId, { dateFrom: startCurrentMonth, dateTo: endCurrentMonth, type: TransactionTypeEnum.outComing });
   }
 }
