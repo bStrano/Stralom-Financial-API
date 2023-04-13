@@ -4,12 +4,13 @@ import { CashFlowStatistics } from '../entities/CashFlowStatistics';
 import { add, lastDayOfMonth, sub } from 'date-fns';
 import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
 import { CashFlowByDayCompiled } from '../entities/CashFlowByDayCompiled';
+import { CashFlowSummaryInterface } from '@core/modules/statistics/CashFlowSummaryInterface';
 
 @Injectable()
 export class CashFlowStatisticsService {
   constructor(private readonly statisticsRepository: TransactionStatisticsRepository) {}
 
-  async getCashFlowStatistics(userId: number) {
+  async getCashFlowStatistics(userId: number): Promise<CashFlowSummaryInterface> {
     const today = new Date();
     const endCurrentMonth = lastDayOfMonth(today);
     const previous12Months = sub(today, { months: 12, days: today.getDay() + 1 });
@@ -45,6 +46,10 @@ export class CashFlowStatisticsService {
     const endCurrentMonth = lastDayOfMonth(today);
     const startCurrentMonth = new Date();
     startCurrentMonth.setDate(1);
-    return await this.statisticsRepository.getCashFlowGroupedByCategory(userId, { dateFrom: startCurrentMonth, dateTo: endCurrentMonth, type: TransactionTypeEnum.outComing });
+    return await this.statisticsRepository.getCashFlowGroupedByCategory(userId, {
+      dateFrom: startCurrentMonth,
+      dateTo: endCurrentMonth,
+      type: TransactionTypeEnum.outComing,
+    });
   }
 }

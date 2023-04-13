@@ -17,7 +17,6 @@ export class CashFlowStatistics implements CashFlowStatisticsInterface {
     this._percentage = ((this._current * 100) / this._mediumPace - 100) * -1;
     this._values = values;
   }
-
   @Expose({ name: 'values' })
   get values(): CashFlowCompiledInterface[] {
     return this._values;
