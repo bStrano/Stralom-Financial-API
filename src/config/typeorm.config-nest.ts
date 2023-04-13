@@ -16,7 +16,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       cli: {
         migrationsDir: __dirname + '/src/infra/database/migrations',
       },
-      synchronize: true,
+      synchronize: false,
       logging: true,
     };
   },

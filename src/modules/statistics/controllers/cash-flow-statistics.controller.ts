@@ -3,20 +3,22 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RequestUser } from '../../auth/decorators/request-user.decorator';
 import { JWTPayload } from '../../auth/types/JWTPayload';
 import { CashFlowStatisticsService } from '../services/cash-flow-statistics.service';
+import { CashFlowStatisticsPresenter } from '../presenters/cash-flow-statistics.presenter';
 
 @Controller('statistics/cash-flow')
 @ApiTags('Statistics - Cashflow')
 @UseInterceptors(ClassSerializerInterceptor)
 export class CashFlowStatisticsController {
-  constructor(private transactionStatisticsService: CashFlowStatisticsService) {}
+  constructor(private transactionStatisticsService: CashFlowStatisticsService, private transactionStatisticsPresenter: CashFlowStatisticsPresenter) {}
 
   @Get()
   @ApiBearerAuth()
   @SerializeOptions({
     excludePrefixes: ['_'],
   })
-  findAll(@RequestUser() user: JWTPayload) {
-    return this.transactionStatisticsService.getCashFlowStatistics(user.userId);
+  async findAll(@RequestUser() user: JWTPayload) {
+    const data = await this.transactionStatisticsService.getCashFlowStatistics(user.userId);
+    return this.transactionStatisticsPresenter.formatCashFlowSummaryWithAbsoluteValuesOnly(data);
   }
 
   @Get('day/complete')
@@ -33,7 +35,8 @@ export class CashFlowStatisticsController {
   @SerializeOptions({
     excludePrefixes: ['_'],
   })
-  getExpensesTotalCompiledByCategory(@RequestUser() user: JWTPayload) {
-    return this.transactionStatisticsService.getExpensesTotalCompiledByCategory(user.userId);
+  async getExpensesTotalCompiledByCategory(@RequestUser() user: JWTPayload) {
+    const data = await this.transactionStatisticsService.getExpensesTotalCompiledByCategory(user.userId);
+    return this.transactionStatisticsPresenter.formatExpensesTotalCompiledByCategoryWithAbsoluteValuesOnly(data);
   }
 }
