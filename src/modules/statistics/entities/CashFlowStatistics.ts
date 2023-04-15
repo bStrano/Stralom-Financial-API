@@ -14,7 +14,7 @@ export class CashFlowStatistics implements CashFlowStatisticsInterface {
     this._total = rawValues.reduce((acc, cur) => acc + cur, 0);
     this._mediumPace = this._total / values.length;
     this._current = rawValues.length === 0 ? 0 : rawValues[values.length - 1];
-    this._percentage = ((this._current * 100) / this._mediumPace - 100) * -1;
+    this._percentage = (this._current * 100) / this._mediumPace - 100;
     this._values = values;
   }
   @Expose({ name: 'values' })
