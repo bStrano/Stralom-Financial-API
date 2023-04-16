@@ -16,7 +16,7 @@ export class TransactionRepository {
   }
 
   async findAll(userId: number) {
-    return this.repository.find({ where: { userId } });
+    return this.repository.find({ where: { userId }, order: { date: 'DESC' } });
   }
 
   async remove(ids: string[]) {
