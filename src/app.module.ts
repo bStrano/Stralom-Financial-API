@@ -9,9 +9,10 @@ import { typeOrmAsyncConfig } from './config/typeorm.config-nest';
 import { DataSource } from 'typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
+import { InvestmentModule } from './modules/investments/investment.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(envConfig), TypeOrmModule.forRootAsync(typeOrmAsyncConfig), TransactionModule, AuthModule, StatisticsModule],
+  imports: [ConfigModule.forRoot(envConfig), TypeOrmModule.forRootAsync(typeOrmAsyncConfig), TransactionModule, InvestmentModule, AuthModule, StatisticsModule],
   controllers: [AppController],
   providers: [
     // {
