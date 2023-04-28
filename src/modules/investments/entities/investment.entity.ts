@@ -1,5 +1,5 @@
 import { InvestmentType } from './investment-type.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
@@ -26,6 +26,12 @@ export class Investment {
   @ApiProperty()
   @ManyToOne(() => InvestmentType)
   type: InvestmentType;
+  @Column()
+  userId: number;
+  @CreateDateColumn()
+  createdAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @Expose()
   get rentability() {
