@@ -2,9 +2,10 @@ import { InvestmentType } from './investment-type.entity';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { InvestmentInterface } from '@core/modules/investments/entities/InvestmentInterface';
 
 @Entity()
-export class Investment {
+export class Investment implements InvestmentInterface {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
