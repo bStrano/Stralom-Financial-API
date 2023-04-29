@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { InvestmentService } from '../services/Investiment.service';
 import { CreateInvestmentDto } from '../dto/CreateInvestment.dto';
@@ -8,6 +8,7 @@ import { UpdateInvestmentDto } from '../dto/UpdateInvestment.dto';
 
 @Controller('investments')
 @ApiTags('Investments')
+@UseInterceptors(ClassSerializerInterceptor)
 export class InvestmentController {
   constructor(private readonly investmentService: InvestmentService) {}
 

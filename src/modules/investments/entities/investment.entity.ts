@@ -3,6 +3,7 @@ import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Up
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { InvestmentInterface } from '@core/modules/investments/entities/InvestmentInterface';
+import { InvestmentStatusEnum } from '@core/modules/investments/enums/InvestmentStatusEnum';
 
 @Entity()
 export class Investment implements InvestmentInterface {
@@ -25,7 +26,7 @@ export class Investment implements InvestmentInterface {
   @Column()
   appliedAmount: number;
   @ApiProperty()
-  @ManyToOne(() => InvestmentType)
+  @ManyToOne(() => InvestmentType, { eager: true })
   type: InvestmentType;
   @Column()
   userId: number;
@@ -37,5 +38,14 @@ export class Investment implements InvestmentInterface {
   @Expose()
   get rentability() {
     return ((this.currentAmount - this.appliedAmount) * 100) / this.appliedAmount;
+  }
+
+  @Expose()
+  get status() {
+    if (this.redemptionDate) {
+      return InvestmentStatusEnum.REDEEMED;
+    } else {
+      return InvestmentStatusEnum.APPLIED;
+    }
   }
 }
