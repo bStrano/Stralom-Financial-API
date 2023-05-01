@@ -28,6 +28,9 @@ export class Investment implements InvestmentInterface {
   @ApiProperty()
   @ManyToOne(() => InvestmentType, { eager: true })
   type: InvestmentType;
+  @ApiProperty()
+  @Column()
+  typeId: string;
   @Column()
   userId: number;
   @CreateDateColumn()

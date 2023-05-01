@@ -24,6 +24,6 @@ export class InvestmentRepository {
   }
 
   async remove(id: string): Promise<void> {
-    await this.investmentRepository.delete({ id });
+    await this.investmentRepository.delete(id);
   }
 }

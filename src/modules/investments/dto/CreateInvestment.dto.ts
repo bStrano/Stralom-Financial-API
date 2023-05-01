@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateInvestmentDTOInterface } from '@core/modules/investments/dtos/CreateInvestmentDTOInterface';
 
@@ -13,8 +13,12 @@ export class CreateInvestmentDto implements CreateInvestmentDTOInterface {
   startDate: Date;
   @ApiProperty()
   @IsNumber()
-  amount: number;
+  appliedAmount: number;
   @ApiProperty()
   @IsNumber()
-  typeId: number;
+  @IsOptional()
+  currentAmount?: number;
+  @ApiProperty()
+  @IsUUID()
+  typeId: string;
 }

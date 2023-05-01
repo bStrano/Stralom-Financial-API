@@ -15,8 +15,8 @@ export class InvestmentService {
   }
 
   async create(userId: number, createInvestmentDto: CreateInvestmentDto) {
-    console.log(createInvestmentDto, userId);
-    return this.repository.save({ ...createInvestmentDto, currentAmount: createInvestmentDto.amount, appliedAmount: createInvestmentDto.amount, userId });
+    const currentAmount = createInvestmentDto.currentAmount ?? createInvestmentDto.appliedAmount;
+    return this.repository.save({ ...createInvestmentDto, currentAmount: currentAmount, appliedAmount: createInvestmentDto.appliedAmount, userId });
   }
 
   async update(id: string, updateInvestmentDto: UpdateInvestmentDto) {
