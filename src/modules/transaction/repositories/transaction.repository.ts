@@ -19,6 +19,10 @@ export class TransactionRepository {
     return this.repository.find({ where: { userId }, order: { date: 'DESC' } });
   }
 
+  async findTotal(userId: number) {
+    return (await this.repository.sum('value', { userId })) || 0;
+  }
+
   async remove(ids: string[]) {
     return this.repository.delete({ id: In(ids) });
   }

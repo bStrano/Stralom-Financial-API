@@ -5,10 +5,14 @@ import { CashFlowStatisticsController } from './controllers/cash-flow-statistics
 import { CashFlowStatisticsService } from './services/cash-flow-statistics.service';
 import { TransactionStatisticsRepository } from './repositories/transaction-statistics.repository';
 import { CashFlowStatisticsPresenter } from './presenters/cash-flow-statistics.presenter';
+import { EquityStatisticsController } from './controllers/equity-statistics.controller';
+import { InvestmentModule } from '../investments/investment.module';
+import { TransactionModule } from '../transaction/transaction.module';
+import { EquityStatisticsService } from './services/equity-statistics.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Transaction])],
-  controllers: [CashFlowStatisticsController],
-  providers: [CashFlowStatisticsService, TransactionStatisticsRepository, CashFlowStatisticsPresenter],
+  imports: [TypeOrmModule.forFeature([Transaction]), InvestmentModule, TransactionModule],
+  controllers: [CashFlowStatisticsController, EquityStatisticsController],
+  providers: [CashFlowStatisticsService, TransactionStatisticsRepository, CashFlowStatisticsPresenter, EquityStatisticsService],
 })
 export class StatisticsModule {}

@@ -23,6 +23,10 @@ export class InvestmentRepository {
     return this.investmentRepository.findOneBy({ id });
   }
 
+  async findTotal(userId: number): Promise<number> {
+    return (await this.investmentRepository.sum('currentAmount', { userId })) || 0;
+  }
+
   async remove(id: string): Promise<void> {
     await this.investmentRepository.delete(id);
   }
