@@ -14,4 +14,10 @@ export class InvestmentStatisticsController {
   findAll(@RequestUser() user: JWTPayload) {
     return this.investmentStatisticsService.findTotal(user.userId);
   }
+
+  @Get('/accumulated/month')
+  @ApiBearerAuth()
+  getAccumulatedMonth(@RequestUser() user: JWTPayload) {
+    return this.investmentStatisticsService.findAccumulatedByMonth(user.userId);
+  }
 }

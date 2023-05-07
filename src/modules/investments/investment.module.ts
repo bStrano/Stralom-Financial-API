@@ -10,11 +10,12 @@ import { InvestmentService } from './services/Investiment.service';
 import { InvestmentController } from './controllers/Investment.controller';
 import { InvestmentStatisticsController } from './controllers/investment-statistics.controller';
 import { InvestmentStatisticsService } from './services/investment-statistics.service';
+import { InvestmentStatisticsRepository } from './repositories/investment-statistics.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Investment, InvestmentType])],
   controllers: [InvestmentTypeController, InvestmentController, InvestmentStatisticsController],
-  providers: [InvestmentTypeService, InvestmentTypeRepository, InvestmentRepository, InvestmentService, InvestmentStatisticsService],
+  providers: [InvestmentTypeService, InvestmentTypeRepository, InvestmentStatisticsRepository, InvestmentRepository, InvestmentService, InvestmentStatisticsService],
   exports: [InvestmentStatisticsService],
 })
 export class InvestmentModule {}

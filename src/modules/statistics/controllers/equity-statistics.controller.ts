@@ -12,7 +12,13 @@ export class EquityStatisticsController {
 
   @Get('/distribution')
   @ApiBearerAuth()
-  async findAll(@RequestUser() user: JWTPayload) {
+  async getEquityDistribution(@RequestUser() user: JWTPayload) {
     return this.equityStatisticsService.getEquityDistribution(user.userId);
+  }
+
+  @Get('/evolution')
+  @ApiBearerAuth()
+  async getEquityEvolution(@RequestUser() user: JWTPayload) {
+    return this.equityStatisticsService.getEquityEvolution(user.userId);
   }
 }
