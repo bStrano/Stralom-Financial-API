@@ -1,6 +1,7 @@
 import { Expose } from 'class-transformer';
+import { EquityDistributionInterface } from '@core/modules/statistics/equity/EquityDistributionInterface';
 
-export class EquityDistribution {
+export class EquityDistribution implements EquityDistributionInterface {
   totalBalance: number;
   totalInvested: number;
   constructor(props: { totalBalance: number; totalInvested: number }) {

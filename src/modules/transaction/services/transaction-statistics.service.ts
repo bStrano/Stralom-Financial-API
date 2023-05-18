@@ -12,11 +12,12 @@ export class TransactionStatisticsService {
 
   async findAccumulatedByMonth(userId: number) {
     const transactions = await this.transactionStatisticsRepository.getCashFlowGroupedByMonth(userId);
-    const accumulated = 0;
+    let accumulated = 0;
     return transactions.map((item) => {
+      accumulated += item.total;
       return {
         ...item,
-        accumulated: item.total + accumulated,
+        accumulated,
       };
     });
   }

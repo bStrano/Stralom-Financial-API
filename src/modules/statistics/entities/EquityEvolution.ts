@@ -18,16 +18,20 @@ export class EquityEvolution {
       return a.year - b.year || a.month - b.month;
     });
     let previousValue: ValueByMonthInterface;
+    let accumulated = 0;
     mergedValues.forEach((item) => {
+      accumulated += item.total;
+      item.accumulated = accumulated;
       if (previousValue && Number(previousValue.year) === Number(item.year) && Number(previousValue.month) === Number(item.month)) {
         const lastEvolutionElement = evolution[evolution.length - 1];
         lastEvolutionElement.quantity += item.quantity;
         lastEvolutionElement.total += item.total;
-        lastEvolutionElement.accumulated += item.accumulated;
+        lastEvolutionElement.accumulated = accumulated;
       } else {
         evolution.push(item);
       }
     });
+    console.log(evolution);
     return evolution;
   }
 }
