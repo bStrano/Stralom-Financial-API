@@ -9,10 +9,11 @@ import { EquityStatisticsController } from './controllers/equity-statistics.cont
 import { InvestmentModule } from '../investments/investment.module';
 import { TransactionModule } from '../transaction/transaction.module';
 import { EquityStatisticsService } from './services/equity-statistics.service';
+import { EquityStatisticsPresenter } from './presenters/equity.statistics.presenter';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Transaction]), InvestmentModule, TransactionModule],
   controllers: [CashFlowStatisticsController, EquityStatisticsController],
-  providers: [CashFlowStatisticsService, TransactionStatisticsRepository, CashFlowStatisticsPresenter, EquityStatisticsService],
+  providers: [CashFlowStatisticsService, TransactionStatisticsRepository, CashFlowStatisticsPresenter, EquityStatisticsService, EquityStatisticsPresenter],
 })
 export class StatisticsModule {}
