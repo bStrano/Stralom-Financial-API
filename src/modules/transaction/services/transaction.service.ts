@@ -14,10 +14,13 @@ export class TransactionService {
     return this.transactionRepository.findAll(userId);
   }
 
+  findTotal(userId: number) {
+    return this.transactionRepository.findTotal(userId);
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} transaction`;
   }
-
   update(id: number, updateTransactionDto: UpdateTransactionDto) {
     return `This action updates a #${id} transaction`;
   }

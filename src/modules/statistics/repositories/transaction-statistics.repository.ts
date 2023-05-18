@@ -34,8 +34,8 @@ export class TransactionStatisticsRepository {
         accumulated: 0,
         total: Number(item.total),
         quantity: Number(item.quantity),
-        year: item.year,
-        month: item.month,
+        year: Number(item.year),
+        month: Number(item.month),
         day: item.day,
         type: item.type,
       };
