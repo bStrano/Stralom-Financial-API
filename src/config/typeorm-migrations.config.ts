@@ -11,6 +11,7 @@ initializeEnvinronment();
 const options: PostgresConnectionOptions = {
   type: 'postgres',
   host: process.env.DB_HOST,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   port: parseInt(process.env.DB_PORT!, 10),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,

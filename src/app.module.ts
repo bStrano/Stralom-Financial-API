@@ -23,5 +23,6 @@ import { InvestmentModule } from './modules/investments/investment.module';
   ],
 })
 export class AppModule {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   constructor(private dataSource: DataSource) {}
 }
