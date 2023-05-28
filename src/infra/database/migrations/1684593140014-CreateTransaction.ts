@@ -16,7 +16,7 @@ export class CreateTransaction1684593140014 implements MigrationInterface {
                "createdAt"  timestamp default now()              not null,
                updated_at   timestamp default now()              not null,
                date         date                                 not null,
-               "categoryId" uuid
+               "categoryId" uuid                                 not null
                    constraint "FK_d3951864751c5812e70d033978d"
                        references ${TableNamesEnum.TRANSACTION_CATEGORY}
            )`,

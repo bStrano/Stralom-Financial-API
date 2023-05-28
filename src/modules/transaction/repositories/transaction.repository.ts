@@ -1,16 +1,23 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { Transaction } from '../entities/transaction.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TransactionRepository {
-  constructor(@InjectRepository(Transaction) private repository: Repository<Transaction>) {}
+  constructor(@InjectDataSource() private dataSource: DataSource, @InjectRepository(Transaction) private repository: Repository<Transaction>) {}
 
   async save(transaction: Partial<Transaction>) {
-    return this.repository.save(transaction);
+    await this.repository.save(transaction);
   }
 
+  async saveMultiple(transactions: Partial<Transaction>[]) {
+    await this.dataSource.transaction(async (transactionalEntityManager) => {
+      for (const transaction of transactions) {
+        await transactionalEntityManager.save(Transaction, transaction);
+      }
+    });
+  }
   async findById(id: string) {
     return this.repository.findOne({ where: { id } });
   }
