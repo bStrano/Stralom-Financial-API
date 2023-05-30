@@ -1,45 +1,48 @@
 FROM node:alpine
 
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
+ARG AWS_ACCESS_REGION
+
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+ENV AWS_DEFAULT_REGION=${AWS_ACCESS_REGION}
+
+RUN apk update && apk upgrade && apk add nano
+
+
+RUN apk --no-cache add python3 py3-pip
+
+RUN  pip3 install --upgrade pip \
+  && pip3 install --no-cache-dir awscli
+
+# Downloading necessary configuration files
+RUN aws s3 cp s3://stralom-deploys/financial/ssh/financial_deploy /root/.ssh/financial_deploy
+RUN aws s3 cp s3://stralom-deploys/financial/ssh/financial_core_deploy /root/.ssh/financial_core_deploy
+RUN aws s3 cp s3://stralom-deploys/financial/ssh/config /root/.ssh/config
 # Set environment variables for git
 ENV GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 # Install git and openssh-client for cloning private repos
-RUN apk update && apk upgrade && apk add git openssh-client
+RUN apk add git openssh-client
 #
-## Set up SSH key for private repository access
-ARG SSH_MAIN_PRIVATE_KEY
-ARG SSH_CORE_PRIVATE_KEY
 
 ##
 RUN mkdir -p /root/.ssh && \
     chmod 0700 /root/.ssh && \
     ssh-keyscan github.com >> /root/.ssh/known_hosts && \
-    echo "${SSH_MAIN_PRIVATE_KEY}" | tr ' ' '\n' > /root/.ssh/id_rsa && \
-    echo "${SSH_CORE_PRIVATE_KEY}" |  tr ' ' '\n' > /root/.ssh/stralom_core_rsa && \
-    echo '/root/.ssh/id_rsa /root/.ssh/stralom_core_rsa' | xargs -n 1 sed -i -e '1s/^/-----BEGIN OPENSSH PRIVATE KEY-----\n/' -e '$s/$/\n-----END OPENSSH PRIVATE KEY-----/' && \
-    chmod 0400 /root/.ssh/id_rsa /root/.ssh/stralom_core_rsa && \
+    chmod 0400 /root/.ssh/financial_deploy /root/.ssh/financial_core_deploy && \
     eval "$(ssh-agent -s)" && \
-    ssh-add /root/.ssh/id_rsa  && \
-    ssh-add /root/.ssh/stralom_core_rsa
-
-
-RUN echo "Host github.com-stralom-api$ \
-              HostName github.com$ \
-              User git$ \
-              IdentityFile /root/.ssh/id_rsa$ \
-          Host github.com-stralom-core$ \
-              HostName github.com$ \
-              User git$ \
-              IdentityFile /root/.ssh/stralom_core_rsa" |  tr '$' '\n'> /root/.ssh/config
+    ssh-add /root/.ssh/financial_deploy && \
+    ssh-add /root/.ssh/financial_core_deploy
 
 WORKDIR /app
 
 #Clone the private repository with submodules
-RUN git clone git@github.com:bStrano/Stralom-Financial-API.git .
-
+RUN  git clone git@github.com:bStrano/Stralom-Financial-API.git .
 RUN sed -i 's/git@github\.com:bStrano\/Stralom-Financial-Core\.git/ssh:\/\/github\.com-stralom-core\/bStrano\/Stralom-Financial-Core\.git/g' .gitmodules
-#
+
 RUN  git submodule update --init --recursive
-RUN cd libs/stralom-financial-core && git checkout master && git pull
+RUN  git checkout master && git pull
 
 COPY package.json /app
 RUN yarn install
