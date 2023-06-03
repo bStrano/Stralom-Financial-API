@@ -34,9 +34,8 @@ export class TransactionService {
   findOne(id: number) {
     return `This action returns a #${id} transaction`;
   }
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    console.log(updateTransactionDto);
-    return `This action updates a #${id} transaction`;
+  update(id: string, updateTransactionDto: UpdateTransactionDto) {
+    return this.transactionRepository.save({ ...updateTransactionDto, id });
   }
 
   remove(ids: string[]) {

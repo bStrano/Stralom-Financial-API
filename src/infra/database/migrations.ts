@@ -5,6 +5,7 @@ import { CreateInvestmentType1684593245601 } from './migrations/1684593245601-Cr
 import { CreateInvestment1684593248976 } from './migrations/1684593248976-CreateInvestment';
 import { PopulateInvestmentType1684596305320 } from './migrations/1684596305320-PopulateInvestmentType';
 import { AddColumnsInstalmentTransaction1684977174676 } from './migrations/1684977174676-AddColumnsInstalmentTransaction';
+import { CreateTag1685576219235 } from './migrations/1685576219235-CreateTag';
 
 export const MIGRATIONS = [
   CreateTransactionCategories1671634229173,
@@ -14,4 +15,5 @@ export const MIGRATIONS = [
   CreateInvestment1684593248976,
   PopulateInvestmentType1684596305320,
   AddColumnsInstalmentTransaction1684977174676,
+  CreateTag1685576219235,
 ];

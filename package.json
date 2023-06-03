@@ -20,6 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "node --require tsconfig-paths/register -r ts-node/register ./node_modules/typeorm/cli.js  -d src/config/typeorm-migrations.config.ts ",
+    "typeorm:create": "node --require tsconfig-paths/register -r ts-node/register ./node_modules/typeorm/cli.js migration:create",
     "typeorm:run": "yarn  typeorm migration:run",
     "prepare": "husky install"
   },

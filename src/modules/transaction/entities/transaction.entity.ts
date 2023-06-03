@@ -1,8 +1,9 @@
 import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { TransactionInterface } from '@core/modules/transactions/entities/TransactionInterface';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransactionCategory } from './transaction-category.entity';
+import { Tag } from '../../tags/entities/tag.entity';
 
 @Entity()
 export class Transaction implements TransactionInterface {
@@ -48,6 +49,12 @@ export class Transaction implements TransactionInterface {
   @OneToMany(() => Transaction, (transaction) => transaction.referenceTransactionId)
   @JoinColumn()
   childrenTransactions: Transaction[];
+
+  @ManyToMany(() => Tag, (tag) => tag.transactions, { cascade: true, eager: true })
+  @JoinTable({
+    name: 'transaction_tags',
+  })
+  tags: Tag[];
 
   @CreateDateColumn()
   createdAt: Date;

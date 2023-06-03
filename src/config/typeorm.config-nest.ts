@@ -1,5 +1,6 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+import { ENTITIES } from '../infra/database/entities';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -13,7 +14,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       username: process.env.DB_USERNAME,
       database: process.env.DB_DATABASE,
       password: process.env.DB_PASSWORD,
-      entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+      entities: [...ENTITIES],
       cli: {
         migrationsDir: __dirname + '/src/infra/database/migrations',
       },

@@ -1,7 +1,8 @@
 import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNumber, IsString, IsUUID, Max, Min } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
+import { Tag } from '../../../tags/entities/tag.entity';
 
 export class CreateTransactionDto {
   @ApiProperty()
@@ -31,4 +32,8 @@ export class CreateTransactionDto {
   @ApiProperty({ example: 'f1316ce5-7dd9-4dae-8c5e-bcfc4755ff49' })
   @IsUUID()
   categoryId: string;
+
+  @ApiProperty({ type: Tag, isArray: true })
+  @Type(() => Tag)
+  tags: Tag[];
 }

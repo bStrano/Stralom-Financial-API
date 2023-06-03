@@ -10,9 +10,10 @@ import { DataSource } from 'typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { InvestmentModule } from './modules/investments/investment.module';
+import { TagsModule } from './modules/tags/tags.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(envConfig), TypeOrmModule.forRootAsync(typeOrmAsyncConfig), TransactionModule, InvestmentModule, AuthModule, StatisticsModule],
+  imports: [ConfigModule.forRoot(envConfig), TypeOrmModule.forRootAsync(typeOrmAsyncConfig), TransactionModule, InvestmentModule, AuthModule, StatisticsModule, TagsModule],
   controllers: [AppController],
   providers: [
     // {
