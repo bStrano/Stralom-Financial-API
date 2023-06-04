@@ -42,7 +42,7 @@ export class Transaction implements TransactionInterface {
   @Column()
   referenceTransactionId: string;
 
-  @ManyToOne(() => Transaction, { eager: true })
+  @ManyToOne(() => Transaction)
   @JoinColumn()
   referenceTransaction: Transaction;
 

@@ -23,6 +23,7 @@ export class CreateTransactionDto {
   @IsNumber()
   @Max(24)
   @Min(1)
+  @Type(() => Number)
   @ApiProperty({ example: 4 })
   instalments: number;
 

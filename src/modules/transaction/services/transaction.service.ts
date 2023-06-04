@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateTransactionDto } from '../dto/transaction/create-transaction.dto';
 import { UpdateTransactionDto } from '../dto/transaction/update-transaction.dto';
 import { TransactionRepository } from '../repositories/transaction.repository';
 import { v4 as uuidv4 } from 'uuid';
 import { Transaction } from '../entities/transaction.entity';
 import { cloneDeep, omit } from 'lodash';
+import DateProviderInterface, { DATE_PROVIDER_TOKEN } from '../../../shared/providers/date/DateProviderInterface';
+import { DateUnitEnum } from '../../../shared/providers/date/constants/DateUnitEnum';
 
 @Injectable()
 export class TransactionService {
-  constructor(private readonly transactionRepository: TransactionRepository) {}
+  constructor(private readonly transactionRepository: TransactionRepository, @Inject(DATE_PROVIDER_TOKEN) private readonly dateProvider: DateProviderInterface) {}
   create(createTransactionDto: CreateTransactionDto, userId: number) {
     const transaction: Partial<Transaction> = { ...createTransactionDto, id: uuidv4(), instalmentCurrent: 1, userId };
     const transactions = [transaction];
@@ -17,6 +19,7 @@ export class TransactionService {
         const childrenTransaction = cloneDeep(omit(transaction, ['id']));
         childrenTransaction.instalmentCurrent = instalment;
         childrenTransaction.referenceTransactionId = transaction.id;
+        childrenTransaction.date = this.dateProvider.add(transaction.date!, instalment, DateUnitEnum.MONTH);
         transactions.push(childrenTransaction);
       }
     }
