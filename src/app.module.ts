@@ -11,9 +11,19 @@ import { AuthModule } from './modules/auth/auth.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { InvestmentModule } from './modules/investments/investment.module';
 import { TagsModule } from './modules/tags/tags.module';
+import { DateModule } from './shared/providers/date/date.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(envConfig), TypeOrmModule.forRootAsync(typeOrmAsyncConfig), TransactionModule, InvestmentModule, AuthModule, StatisticsModule, TagsModule],
+  imports: [
+    ConfigModule.forRoot(envConfig),
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+    DateModule,
+    TransactionModule,
+    InvestmentModule,
+    AuthModule,
+    StatisticsModule,
+    TagsModule,
+  ],
   controllers: [AppController],
   providers: [
     // {
