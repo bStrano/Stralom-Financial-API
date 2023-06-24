@@ -7,12 +7,23 @@ import { Transaction } from '../entities/transaction.entity';
 import { cloneDeep, omit } from 'lodash';
 import DateProviderInterface, { DATE_PROVIDER_TOKEN } from '../../../shared/providers/date/DateProviderInterface';
 import { DateUnitEnum } from '../../../shared/providers/date/constants/DateUnitEnum';
+import { Tag } from '../../tags/entities/tag.entity';
 
 @Injectable()
 export class TransactionService {
   constructor(private readonly transactionRepository: TransactionRepository, @Inject(DATE_PROVIDER_TOKEN) private readonly dateProvider: DateProviderInterface) {}
   create(createTransactionDto: CreateTransactionDto, userId: number) {
-    const transaction: Partial<Transaction> = { ...createTransactionDto, id: uuidv4(), instalmentCurrent: 1, userId };
+    const tags = createTransactionDto.tags.map((item) => {
+      if (typeof item === 'string') {
+        const newTag = new Tag();
+        newTag.userId = userId;
+        newTag.color = '000000';
+        newTag.name = item;
+        return newTag;
+      }
+      return item;
+    });
+    const transaction: Partial<Transaction> = { ...createTransactionDto, tags, id: uuidv4(), instalmentCurrent: 1, userId };
     const transactions = [transaction];
     if (transaction.instalments && transaction.instalments >= 1) {
       for (let instalment = 2; instalment <= transaction.instalments; instalment++) {

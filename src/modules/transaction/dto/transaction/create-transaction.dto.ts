@@ -36,5 +36,5 @@ export class CreateTransactionDto {
 
   @ApiProperty({ type: Tag, isArray: true })
   @Type(() => Tag)
-  tags: Tag[];
+  tags: (Tag | string)[];
 }
