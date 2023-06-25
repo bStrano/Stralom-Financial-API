@@ -10,10 +10,21 @@ import { InvestmentModule } from '../investments/investment.module';
 import { TransactionModule } from '../transaction/transaction.module';
 import { EquityStatisticsService } from './services/equity-statistics.service';
 import { EquityStatisticsPresenter } from './presenters/equity.statistics.presenter';
+import { TransactionTagsStatisticsController } from './controllers/transaction-tags-statistics.controller';
+import { TransactionStatisticsTagsRepository } from './repositories/transaction-tag-statistics.repository';
+import { TransactionTagsStatisticsService } from './services/transaction-tags-statistics.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Transaction]), InvestmentModule, TransactionModule],
-  controllers: [CashFlowStatisticsController, EquityStatisticsController],
-  providers: [CashFlowStatisticsService, TransactionStatisticsRepository, CashFlowStatisticsPresenter, EquityStatisticsService, EquityStatisticsPresenter],
+  controllers: [CashFlowStatisticsController, EquityStatisticsController, TransactionTagsStatisticsController],
+  providers: [
+    CashFlowStatisticsService,
+    TransactionStatisticsRepository,
+    CashFlowStatisticsPresenter,
+    EquityStatisticsService,
+    EquityStatisticsPresenter,
+    TransactionStatisticsTagsRepository,
+    TransactionTagsStatisticsService,
+  ],
 })
 export class StatisticsModule {}
