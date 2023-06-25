@@ -14,14 +14,14 @@ export class TransactionService {
   constructor(private readonly transactionRepository: TransactionRepository, @Inject(DATE_PROVIDER_TOKEN) private readonly dateProvider: DateProviderInterface) {}
   create(createTransactionDto: CreateTransactionDto, userId: number) {
     const tags = createTransactionDto.tags.map((item) => {
-      if (typeof item === 'string') {
+      if (typeof item === 'string' || !item.hasOwnProperty('id')) {
         const newTag = new Tag();
         newTag.userId = userId;
-        newTag.color = '000000';
-        newTag.name = item;
+        newTag.color = typeof item !== 'string' && item.color ? item.color : '000000';
+        newTag.name = typeof item !== 'string' ? item.name : item;
         return newTag;
       }
-      return item;
+      return item as Tag;
     });
     const transaction: Partial<Transaction> = { ...createTransactionDto, tags, id: uuidv4(), instalmentCurrent: 1, userId };
     const transactions = [transaction];

@@ -3,6 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNumber, IsString, IsUUID, Max, Min } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { Tag } from '../../../tags/entities/tag.entity';
+import { CreateTagDto } from '../../../tags/dtos/create-tag.dto';
 
 export class CreateTransactionDto {
   @ApiProperty()
@@ -36,5 +37,5 @@ export class CreateTransactionDto {
 
   @ApiProperty({ type: Tag, isArray: true })
   @Type(() => Tag)
-  tags: (Tag | string)[];
+  tags: (Tag | string | CreateTagDto)[];
 }
