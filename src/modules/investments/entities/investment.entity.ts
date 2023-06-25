@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { InvestmentInterface } from '@core/modules/investments/entities/InvestmentInterface';
 import { InvestmentStatusEnum } from '@core/modules/investments/enums/InvestmentStatusEnum';
+import { differenceInMonths } from 'date-fns';
 
 @Entity()
 export class Investment implements InvestmentInterface {
@@ -41,6 +42,12 @@ export class Investment implements InvestmentInterface {
   @Expose()
   get rentability() {
     return ((this.currentAmount - this.appliedAmount) * 100) / this.appliedAmount;
+  }
+
+  @Expose()
+  get rentabilityMonth() {
+    const months = differenceInMonths(new Date(), this.startDate);
+    return ((this.currentAmount - this.appliedAmount) * 100) / this.appliedAmount / months;
   }
 
   @Expose()
