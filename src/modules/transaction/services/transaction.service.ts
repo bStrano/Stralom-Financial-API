@@ -30,7 +30,7 @@ export class TransactionService {
         const childrenTransaction = cloneDeep(omit(transaction, ['id']));
         childrenTransaction.instalmentCurrent = instalment;
         childrenTransaction.referenceTransactionId = transaction.id;
-        childrenTransaction.date = this.dateProvider.add(transaction.date!, instalment, DateUnitEnum.MONTH);
+        childrenTransaction.date = this.dateProvider.add(transaction.date!, instalment - 1, DateUnitEnum.MONTH);
         transactions.push(childrenTransaction);
       }
     }
