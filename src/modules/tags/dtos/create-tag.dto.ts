@@ -1,5 +1,6 @@
-import { IsHexadecimal, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsHexadecimalWithHash } from '../../../shared/decorators/validators/isHexadecimalWithHash';
 
 export class CreateTagDto {
   @IsNotEmpty()
@@ -7,7 +8,7 @@ export class CreateTagDto {
   @ApiProperty()
   name: string;
   @IsOptional()
-  @IsHexadecimal()
+  @IsHexadecimalWithHash()
   @ApiProperty({ example: '#ffffff' })
   color?: string;
 }
