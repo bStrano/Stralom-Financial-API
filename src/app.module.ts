@@ -10,9 +10,20 @@ import { DataSource } from 'typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
 import { InvestmentModule } from './modules/investments/investment.module';
+import { TagsModule } from './modules/tags/tags.module';
+import { DateModule } from './shared/providers/date/date.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(envConfig), TypeOrmModule.forRootAsync(typeOrmAsyncConfig), TransactionModule, InvestmentModule, AuthModule, StatisticsModule],
+  imports: [
+    ConfigModule.forRoot(envConfig),
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+    DateModule,
+    TransactionModule,
+    InvestmentModule,
+    AuthModule,
+    StatisticsModule,
+    TagsModule,
+  ],
   controllers: [AppController],
   providers: [
     // {
@@ -23,5 +34,6 @@ import { InvestmentModule } from './modules/investments/investment.module';
   ],
 })
 export class AppModule {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
   constructor(private dataSource: DataSource) {}
 }

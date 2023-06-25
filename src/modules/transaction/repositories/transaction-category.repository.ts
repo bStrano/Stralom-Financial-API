@@ -17,6 +17,7 @@ export class TransactionCategoryRepository {
   }
 
   update(id: string, transactionCategory: UpdateTransactionCategoryDto): Promise<TransactionCategory | null> {
+    console.log(transactionCategory);
     return this.transactionCategory.findOneBy({ id });
   }
 

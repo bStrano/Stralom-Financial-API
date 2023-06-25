@@ -11,9 +11,10 @@ import { TransactionRepository } from './repositories/transaction.repository';
 import { TransactionStatisticsService } from './services/transaction-statistics.service';
 import { TransactionStatisticsRepository } from '../statistics/repositories/transaction-statistics.repository';
 import { TransactionStatisticsController } from './controllers/transaction-statistics.controller';
+import { DateModule } from '../../shared/providers/date/date.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TransactionCategory, Transaction])],
+  imports: [TypeOrmModule.forFeature([TransactionCategory, Transaction]), DateModule],
   controllers: [TransactionController, TransactionCategoryController, TransactionStatisticsController],
   providers: [
     TransactionService,
