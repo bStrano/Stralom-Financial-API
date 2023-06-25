@@ -85,6 +85,7 @@ export class EquityEvolution {
       } else {
         evolution.push(item);
       }
+      previousValue = item;
     });
     return evolution;
   }

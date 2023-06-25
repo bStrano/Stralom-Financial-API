@@ -14,6 +14,7 @@ export class AddColumnsInstalmentTransaction1684977174676 implements MigrationIn
         name: this.INSTALMENT_CURRENT_COLUMN,
         type: 'int',
         comment: 'The current instalment of the transaction',
+        default: 1,
       }),
     );
 
@@ -23,6 +24,7 @@ export class AddColumnsInstalmentTransaction1684977174676 implements MigrationIn
         name: this.INSTALMENT_MAX_COLUMN,
         type: 'int',
         comment: 'The numbers of instalments that the transaction have',
+        default: 1,
       }),
     );
 

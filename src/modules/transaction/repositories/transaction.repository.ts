@@ -2,6 +2,7 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
 import { Transaction } from '../entities/transaction.entity';
 import { Injectable } from '@nestjs/common';
+import { Tag } from '../../tags/entities/tag.entity';
 
 @Injectable()
 export class TransactionRepository {
@@ -13,8 +14,17 @@ export class TransactionRepository {
 
   async saveMultiple(transactions: Partial<Transaction>[]) {
     await this.dataSource.transaction(async (transactionalEntityManager) => {
+      let tagsSaved: Tag[] = [];
+      let index = 0;
       for (const transaction of transactions) {
-        await transactionalEntityManager.save(Transaction, transaction);
+        if (index > 0) {
+          transaction.tags = tagsSaved;
+        }
+        const transactionNew = await transactionalEntityManager.save(Transaction, transaction);
+        if (index === 0) {
+          tagsSaved = transactionNew.tags;
+        }
+        index++;
       }
     });
   }
