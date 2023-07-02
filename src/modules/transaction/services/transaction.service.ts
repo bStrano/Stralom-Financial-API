@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTransactionDto } from '../dto/transaction/create-transaction.dto';
 import { UpdateTransactionDto } from '../dto/transaction/update-transaction.dto';
 import { TransactionRepository } from '../repositories/transaction.repository';
@@ -8,21 +8,13 @@ import { cloneDeep, omit } from 'lodash';
 import DateProviderInterface, { DATE_PROVIDER_TOKEN } from '../../../shared/providers/date/DateProviderInterface';
 import { DateUnitEnum } from '../../../shared/providers/date/constants/DateUnitEnum';
 import { Tag } from '../../tags/entities/tag.entity';
+import { CreateTagDto } from '../../tags/dtos/create-tag.dto';
 
 @Injectable()
 export class TransactionService {
   constructor(private readonly transactionRepository: TransactionRepository, @Inject(DATE_PROVIDER_TOKEN) private readonly dateProvider: DateProviderInterface) {}
   create(createTransactionDto: CreateTransactionDto, userId: number) {
-    const tags = createTransactionDto.tags.map((item) => {
-      if (typeof item === 'string' || !item.hasOwnProperty('id')) {
-        const newTag = new Tag();
-        newTag.userId = userId;
-        newTag.color = typeof item !== 'string' && item.color ? item.color : '000000';
-        newTag.name = typeof item !== 'string' ? item.name : item;
-        return newTag;
-      }
-      return item as Tag;
-    });
+    const tags = this.setupTagsForSave(userId, createTransactionDto.tags);
     const transaction: Partial<Transaction> = { ...createTransactionDto, tags, id: uuidv4(), instalmentCurrent: 1, userId };
     const transactions = [transaction];
     if (transaction.instalments && transaction.instalments >= 1) {
@@ -37,8 +29,21 @@ export class TransactionService {
     return this.transactionRepository.saveMultiple(transactions);
   }
 
+  private setupTagsForSave(userId: number, tags: (Tag | string | CreateTagDto)[]) {
+    return tags.map((item) => {
+      if (typeof item === 'string' || !item.hasOwnProperty('id')) {
+        const newTag = new Tag();
+        newTag.userId = userId;
+        newTag.color = typeof item !== 'string' && item.color ? item.color : '000000';
+        newTag.name = typeof item !== 'string' ? item.name : item;
+        return newTag;
+      }
+      return item as Tag;
+    });
+  }
+
   findAll(userId: number) {
-    return this.transactionRepository.findAll(userId);
+    return this.transactionRepository.findAll({ userId });
   }
 
   findTotal(userId: number) {
@@ -48,11 +53,39 @@ export class TransactionService {
   findOne(id: number) {
     return `This action returns a #${id} transaction`;
   }
-  update(id: string, updateTransactionDto: UpdateTransactionDto) {
-    return this.transactionRepository.save({ ...updateTransactionDto, id });
+  async update(id: string, updateTransactionDto: UpdateTransactionDto) {
+    const transaction = await this.transactionRepository.findById(id);
+    if (!transaction) throw new NotFoundException('Transação não encontrada.');
+    let transactions: Transaction[] = [transaction];
+    if (transaction.instalments > 1) {
+      transactions = await this.transactionRepository.findAllByIdOrReferenceTransaction(transaction.id, transaction.referenceTransactionId);
+    }
+    transactions.map((item) => {
+      if (updateTransactionDto.type) {
+        item.type = updateTransactionDto.type;
+      }
+      if (updateTransactionDto.description) {
+        item.description = updateTransactionDto.description;
+      }
+      if (updateTransactionDto.date && transaction.instalments === 1) {
+        item.date = updateTransactionDto.date;
+      }
+      if (updateTransactionDto.value) {
+        item.value = updateTransactionDto.value;
+      }
+      if (updateTransactionDto.categoryId) {
+        item.category.id = updateTransactionDto.categoryId;
+      }
+      if (updateTransactionDto.tags) {
+        item.tags = this.setupTagsForSave(transaction.userId, updateTransactionDto.tags);
+        console.log(item.tags);
+      }
+    });
+
+    return this.transactionRepository.saveMultiple(transactions);
   }
 
-  remove(ids: string[]) {
-    return this.transactionRepository.remove(ids);
+  remove(id: string) {
+    return this.transactionRepository.remove(id);
   }
 }

@@ -2,6 +2,7 @@ import { Repository, UpdateResult } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Investment } from '../entities/investment.entity';
+import { UpdateInvestmentDto } from '../dto/UpdateInvestment.dto';
 
 @Injectable()
 export class InvestmentRepository {
@@ -15,7 +16,8 @@ export class InvestmentRepository {
     return this.investmentRepository.save(investment);
   }
 
-  update(id: string, investment: Partial<Investment>): Promise<UpdateResult> {
+  update(id: string, investmentUpdate: Partial<UpdateInvestmentDto>): Promise<UpdateResult> {
+    const investment = this.investmentRepository.create(investmentUpdate);
     return this.investmentRepository.update(id, investment);
   }
 

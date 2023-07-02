@@ -1,8 +1,9 @@
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, In, Repository } from 'typeorm';
+import { DataSource, FindOptionsWhere, In, Repository } from 'typeorm';
 import { Transaction } from '../entities/transaction.entity';
 import { Injectable } from '@nestjs/common';
 import { Tag } from '../../tags/entities/tag.entity';
+import { FindTransactionOptionalParamsDto } from '../dto/transaction/find-transaction-optional-params.dto';
 
 @Injectable()
 export class TransactionRepository {
@@ -32,15 +33,52 @@ export class TransactionRepository {
     return this.repository.findOne({ where: { id } });
   }
 
-  async findAll(userId: number) {
-    return this.repository.find({ where: { userId }, order: { date: 'DESC' } });
+  async findAll(optionalParams?: FindTransactionOptionalParamsDto) {
+    const whereCondition: FindOptionsWhere<Transaction> | FindOptionsWhere<Transaction>[] | undefined = {};
+
+    if (optionalParams?.ids) {
+      whereCondition.id = In(optionalParams.ids);
+    }
+
+    return this.repository.find({ where: whereCondition, order: { date: 'DESC' } });
   }
 
+  async findAllByIdOrReferenceTransaction(id: string, referencedTransactionId?: string) {
+    const whereConditions: FindOptionsWhere<Transaction> | FindOptionsWhere<Transaction>[] | undefined = [
+      {
+        id,
+      },
+      {
+        referenceTransactionId: id,
+      },
+    ];
+    if (referencedTransactionId) {
+      whereConditions.push({
+        referenceTransactionId: referencedTransactionId,
+      });
+      whereConditions.push({
+        id: referencedTransactionId,
+      });
+    }
+    return this.repository.find({
+      where: whereConditions,
+      order: { date: 'DESC' },
+    });
+  }
   async findTotal(userId: number) {
     return (await this.repository.sum('value', { userId })) || 0;
   }
 
-  async remove(ids: string[]) {
-    return this.repository.delete({ id: In(ids) });
+  async remove(id: string) {
+    const transaction = await this.repository.findOneOrFail({ where: { id } });
+    const transactions = await this.findAllByIdOrReferenceTransaction(transaction.id, transaction.referenceTransactionId);
+    const transactionWithInstalments: Transaction[] = [];
+    transactions.map((item) => {
+      transactionWithInstalments.push(item);
+      if (item.childrenTransactions && item.childrenTransactions.length > 0) {
+        transactionWithInstalments.push(...item.childrenTransactions);
+      }
+    });
+    return this.repository.remove(transactionWithInstalments);
   }
 }

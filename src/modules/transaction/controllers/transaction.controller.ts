@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { TransactionService } from '../services/transaction.service';
 import { CreateTransactionDto } from '../dto/transaction/create-transaction.dto';
 import { UpdateTransactionDto } from '../dto/transaction/update-transaction.dto';
@@ -38,12 +38,6 @@ export class TransactionController {
   @Delete(':id')
   @ApiBearerAuth()
   remove(@Param('id') id: string) {
-    return this.transactionService.remove([id]);
-  }
-
-  @Delete()
-  @ApiBearerAuth()
-  removeMultiple(@Query('ids') ids: string[]) {
-    return this.transactionService.remove(ids);
+    return this.transactionService.remove(id);
   }
 }

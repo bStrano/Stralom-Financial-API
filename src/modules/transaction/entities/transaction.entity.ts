@@ -46,11 +46,11 @@ export class Transaction implements TransactionInterface {
   @JoinColumn()
   referenceTransaction: Transaction;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.referenceTransactionId)
+  @OneToMany(() => Transaction, (transaction) => transaction.id, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn()
   childrenTransactions: Transaction[];
 
-  @ManyToMany(() => Tag, (tag) => tag.transactions, { cascade: true, eager: true })
+  @ManyToMany(() => Tag, (tag) => tag.transactions, { cascade: true, eager: true, onDelete: 'CASCADE' })
   @JoinTable({
     name: 'transaction_tags',
   })
