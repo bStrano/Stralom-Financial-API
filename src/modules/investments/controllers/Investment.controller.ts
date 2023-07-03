@@ -5,6 +5,7 @@ import { CreateInvestmentDto } from '../dto/CreateInvestment.dto';
 import { RequestUser } from '../../auth/decorators/request-user.decorator';
 import { JWTPayload } from '../../auth/types/JWTPayload';
 import { UpdateInvestmentDto } from '../dto/UpdateInvestment.dto';
+import { RedeemInvestmentDto } from '../dto/RedeemInvestment.dto';
 
 @Controller('investments')
 @ApiTags('Investments')
@@ -34,6 +35,12 @@ export class InvestmentController {
   @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateInvestmentDto: UpdateInvestmentDto) {
     return this.investmentService.update(id, updateInvestmentDto);
+  }
+
+  @Patch('/redeem/:id')
+  @ApiBearerAuth()
+  redeem(@Param('id') id: string, @Body() updateInvestmentDto: RedeemInvestmentDto) {
+    return this.investmentService.redeem(id, updateInvestmentDto);
   }
 
   @Delete(':id')

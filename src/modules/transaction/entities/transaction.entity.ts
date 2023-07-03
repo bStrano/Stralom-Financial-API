@@ -1,9 +1,10 @@
 import { TransactionTypeEnum } from '@core/modules/transactions/enums/TransactionTypeEnum';
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { TransactionInterface } from '@core/modules/transactions/entities/TransactionInterface';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransactionCategory } from './transaction-category.entity';
 import { Tag } from '../../tags/entities/tag.entity';
+import { Investment } from '../../investments/entities/investment.entity';
 
 @Entity()
 export class Transaction implements TransactionInterface {
@@ -55,6 +56,20 @@ export class Transaction implements TransactionInterface {
     name: 'transaction_tags',
   })
   tags: Tag[];
+
+  @Column()
+  investmentId?: string;
+
+  @OneToOne(() => Investment, (investment) => investment.investmentTransaction, { cascade: ['insert', 'update'] })
+  @JoinColumn()
+  investment?: Investment;
+
+  @Column()
+  redeemedInvestmentId?: string;
+
+  @OneToOne(() => Investment, (investment) => investment.redeemedTransaction, { cascade: ['insert', 'update'] })
+  @JoinColumn()
+  redeemedInvestment?: Investment;
 
   @CreateDateColumn()
   createdAt: Date;

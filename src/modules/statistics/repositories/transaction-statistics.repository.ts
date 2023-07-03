@@ -6,6 +6,7 @@ import { TransactionTypeEnum } from '@core/modules/transactions/enums/Transactio
 import { TransactionCategory } from '../../transaction/entities/transaction-category.entity';
 import { CashFlowCompiledInterface } from '../interfaces/CashFlowCompiledInterface';
 import { CashFlowCompiledGroupedByCategoryInterface } from '@core/modules/statistics/CashFlowCompiledGroupedByCategory';
+import { TransactionCategoryEnum } from '@core/modules/transactions/enums/TransactionCategoryEnum';
 
 @Injectable()
 export class TransactionStatisticsRepository {
@@ -94,6 +95,10 @@ export class TransactionStatisticsRepository {
       queryBuilder.addSelect(`date_part('day', transaction.date) as day`);
       queryBuilder.addGroupBy(`date_part('day', transaction.date)`);
     }
+
+    if (optionalParams?.ignoreInvestment) {
+      queryBuilder.andWhere(`transaction.categoryId != :ignoredCategories`, { ignoredCategories: TransactionCategoryEnum.INVESTMENTS });
+    }
   }
 }
 
@@ -103,4 +108,5 @@ interface CashFlowOptionalParams {
   type?: TransactionTypeEnum;
   groupByDay?: boolean;
   groupByType?: boolean;
+  ignoreInvestment?: boolean;
 }

@@ -14,16 +14,18 @@ export class CashFlowStatisticsService {
     const today = new Date();
     const endCurrentMonth = lastDayOfMonth(today);
     const previous12Months = sub(today, { months: 12, days: today.getDay() + 1 });
-    const balanceCashFlow = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, { dateFrom: previous12Months, dateTo: endCurrentMonth });
+    const balanceCashFlow = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, { dateFrom: previous12Months, dateTo: endCurrentMonth, ignoreInvestment: true });
     const outComingCashFlow = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, {
       dateFrom: previous12Months,
       dateTo: endCurrentMonth,
       type: TransactionTypeEnum.outComing,
+      ignoreInvestment: true,
     });
     const incomingFlow = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, {
       dateFrom: previous12Months,
       dateTo: endCurrentMonth,
       type: TransactionTypeEnum.incoming,
+      ignoreInvestment: true,
     });
     return {
       balance: new CashFlowStatistics(balanceCashFlow),
@@ -36,7 +38,13 @@ export class CashFlowStatisticsService {
     const today = new Date();
     const tomorrow = add(today, { days: 1 });
     const dateFrom = sub(today, { days: 31 });
-    const result = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, { dateFrom: dateFrom, dateTo: today, groupByDay: true, groupByType: true });
+    const result = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, {
+      dateFrom: dateFrom,
+      dateTo: today,
+      groupByDay: true,
+      groupByType: true,
+      ignoreInvestment: true,
+    });
 
     return new CashFlowByDayCompiled(dateFrom, tomorrow, result);
   }
