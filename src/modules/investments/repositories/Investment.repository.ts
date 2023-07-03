@@ -1,4 +1,4 @@
-import { Repository, UpdateResult } from 'typeorm';
+import { IsNull, Repository, UpdateResult } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Investment } from '../entities/investment.entity';
@@ -26,7 +26,7 @@ export class InvestmentRepository {
   }
 
   async findTotal(userId: number): Promise<number> {
-    return (await this.investmentRepository.sum('currentAmount', { userId })) || 0;
+    return (await this.investmentRepository.sum('currentAmount', { userId, redemptionDate: IsNull() })) || 0;
   }
 
   async remove(id: string): Promise<void> {

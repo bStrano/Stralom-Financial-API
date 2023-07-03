@@ -23,7 +23,7 @@ export class PopulateTransactionCategories1671637366183 implements MigrationInte
     { id: uuidv4(), color: '#DCD427', icon: 'Security', name: 'Impostos' },
     { id: uuidv4(), color: '#323232', icon: 'Security', name: 'Presente' },
     { id: uuidv4(), color: '#003f5c', icon: 'Security', name: 'Software' },
-    { id: uuidv4(), color: '#54d62c', icon: 'Security', name: 'Investimentos' },
+    { id: '487b4b3a-f9e5-476a-bbe2-e226a5cc6adc', color: '#54d62c', icon: 'Security', name: 'Investimentos' },
   ];
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.manager.createQueryBuilder().insert().into(TransactionCategory).values(this.values).execute();

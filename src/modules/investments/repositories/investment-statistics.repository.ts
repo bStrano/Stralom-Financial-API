@@ -15,6 +15,7 @@ export class InvestmentStatisticsRepository {
       .groupBy(`date_part('year', investment.startDate)`)
       .addGroupBy(`date_part('month', investment.startDate)`)
       .where('investment.userId = :userId', { userId })
+      // .andWhere('investment.redemptionDate is null')
       .addOrderBy(`year, month`);
 
     const result = await queryBuilder.getRawMany();

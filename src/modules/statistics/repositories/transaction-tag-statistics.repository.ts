@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Transaction } from '../../transaction/entities/transaction.entity';
 import { TotalTagInterface } from '@core/modules/statistics/tags/TotalTagInterface';
 import { GetTotalByTagDto } from '../dtos/GetTotalByTag.dto';
+import { TransactionCategoryEnum } from '@core/modules/transactions/enums/TransactionCategoryEnum';
 
 @Injectable()
 export class TransactionStatisticsTagsRepository {
@@ -15,8 +16,8 @@ export class TransactionStatisticsTagsRepository {
       .innerJoinAndSelect('transaction.tags', 'tags')
       .select('SUM(transaction.value) as total, COUNT(1) as quantity, tags.name as name, tags.color as color')
       .groupBy(`tags.id`)
-      .where('transaction.userId = :userId', { userId });
-
+      .where('transaction.userId = :userId', { userId })
+      .andWhere('transaction.categoryId != :categoryIgnored', { categoryIgnored: TransactionCategoryEnum.INVESTMENTS });
     if (getTotalByTagDto) {
       if (getTotalByTagDto.start && getTotalByTagDto.end) {
         queryBuilder.andWhere('transaction.date BETWEEN :start AND :end', { start: getTotalByTagDto.start, end: getTotalByTagDto.end });
