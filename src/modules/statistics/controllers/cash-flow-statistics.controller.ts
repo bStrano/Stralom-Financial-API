@@ -1,9 +1,10 @@
-import { ClassSerializerInterceptor, Controller, Get, SerializeOptions, UseInterceptors } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Query, SerializeOptions, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RequestUser } from '../../auth/decorators/request-user.decorator';
 import { JWTPayload } from '../../auth/types/JWTPayload';
 import { CashFlowStatisticsService } from '../services/cash-flow-statistics.service';
 import { CashFlowStatisticsPresenter } from '../presenters/cash-flow-statistics.presenter';
+import { FilterOptionsDto } from '../dtos/FilterOptions.dto';
 
 @Controller('statistics/cash-flow')
 @ApiTags('Statistics - Cashflow')
@@ -16,8 +17,8 @@ export class CashFlowStatisticsController {
   @SerializeOptions({
     excludePrefixes: ['_'],
   })
-  async findAll(@RequestUser() user: JWTPayload) {
-    const data = await this.transactionStatisticsService.getCashFlowStatistics(user.userId);
+  async findAll(@RequestUser() user: JWTPayload, @Query() optionalParams: FilterOptionsDto) {
+    const data = await this.transactionStatisticsService.getCashFlowStatistics(user.userId, optionalParams);
     return this.transactionStatisticsPresenter.formatCashFlowSummaryWithAbsoluteValuesOnly(data);
   }
 
@@ -26,8 +27,8 @@ export class CashFlowStatisticsController {
   @SerializeOptions({
     excludePrefixes: ['_'],
   })
-  getTransactionsTotalCompiledByDay(@RequestUser() user: JWTPayload) {
-    return this.transactionStatisticsService.getTransactionsTotalCompiledByDay(user.userId);
+  getTransactionsTotalCompiledByDay(@RequestUser() user: JWTPayload, @Query() optionalParams: FilterOptionsDto) {
+    return this.transactionStatisticsService.getTransactionsTotalCompiledByDay(user.userId, optionalParams);
   }
 
   @Get('category/expenses')
@@ -35,8 +36,8 @@ export class CashFlowStatisticsController {
   @SerializeOptions({
     excludePrefixes: ['_'],
   })
-  async getExpensesTotalCompiledByCategory(@RequestUser() user: JWTPayload) {
-    const data = await this.transactionStatisticsService.getExpensesTotalCompiledByCategory(user.userId);
+  async getExpensesTotalCompiledByCategory(@RequestUser() user: JWTPayload, @Query() optionalParams: FilterOptionsDto) {
+    const data = await this.transactionStatisticsService.getExpensesTotalCompiledByCategory(user.userId, optionalParams);
     return this.transactionStatisticsPresenter.formatExpensesTotalCompiledByCategoryWithAbsoluteValuesOnly(data);
   }
 }
