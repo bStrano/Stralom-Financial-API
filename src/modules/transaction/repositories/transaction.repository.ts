@@ -66,7 +66,12 @@ export class TransactionRepository {
     });
   }
   async findTotal(userId: number) {
-    return (await this.repository.sum('value', { userId })) || 0;
+    const data: { value: number } | undefined = await this.repository
+      .createQueryBuilder('transaction')
+      .select('SUM(transaction.value)', 'value')
+      .where('transaction.userId = :userId', { userId })
+      .getRawOne();
+    return Number(data?.value) || 0;
   }
 
   async remove(id: string) {
