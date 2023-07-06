@@ -15,18 +15,22 @@ export class CashFlowStatisticsService {
     const today = optionalParams?.startDate ? optionalParams.startDate : new Date();
     const endCurrentMonth = optionalParams?.endDate ? optionalParams.endDate : lastDayOfMonth(today);
     const previous12Months = sub(today, { months: 12, days: today.getDay() + 1 });
-    const balanceCashFlow = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, { dateFrom: previous12Months, dateTo: endCurrentMonth, ignoreInvestment: true });
+    const balanceCashFlow = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, {
+      dateFrom: previous12Months,
+      dateTo: endCurrentMonth,
+      ignoreInvestment: !optionalParams?.withInstalments,
+    });
     const outComingCashFlow = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, {
       dateFrom: previous12Months,
       dateTo: endCurrentMonth,
       type: TransactionTypeEnum.outComing,
-      ignoreInvestment: true,
+      ignoreInvestment: !optionalParams?.withInstalments,
     });
     const incomingFlow = await this.statisticsRepository.getCashFlowGroupedByMonth(userId, {
       dateFrom: previous12Months,
       dateTo: endCurrentMonth,
       type: TransactionTypeEnum.incoming,
-      ignoreInvestment: true,
+      ignoreInvestment: !optionalParams?.withInstalments,
     });
     return {
       balance: new CashFlowStatistics(balanceCashFlow),
@@ -45,7 +49,7 @@ export class CashFlowStatisticsService {
       dateTo,
       groupByDay: true,
       groupByType: true,
-      ignoreInvestment: true,
+      ignoreInvestment: !optionalParams?.withInstalments,
     });
     return new CashFlowByDayCompiled(dateFrom, dateTo, result);
   }
