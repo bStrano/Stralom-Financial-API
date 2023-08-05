@@ -33,8 +33,10 @@ export class TransactionRepository {
     return this.repository.findOne({ where: { id } });
   }
 
-  async findAll(optionalParams?: FindTransactionOptionalParamsDto) {
-    const whereCondition: FindOptionsWhere<Transaction> | FindOptionsWhere<Transaction>[] | undefined = {};
+  async findAll(userId: number, optionalParams?: FindTransactionOptionalParamsDto) {
+    const whereCondition: FindOptionsWhere<Transaction> | FindOptionsWhere<Transaction>[] | undefined = {
+      userId,
+    };
 
     if (optionalParams?.ids) {
       whereCondition.id = In(optionalParams.ids);

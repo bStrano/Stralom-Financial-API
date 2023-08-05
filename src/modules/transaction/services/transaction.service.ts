@@ -22,6 +22,7 @@ export class TransactionService {
         const childrenTransaction = cloneDeep(omit(transaction, ['id']));
         childrenTransaction.instalmentCurrent = instalment;
         childrenTransaction.referenceTransactionId = transaction.id;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         childrenTransaction.date = this.dateProvider.add(transaction.date!, instalment - 1, DateUnitEnum.MONTH);
         transactions.push(childrenTransaction);
       }
@@ -43,7 +44,7 @@ export class TransactionService {
   }
 
   findAll(userId: number) {
-    return this.transactionRepository.findAll({ userId });
+    return this.transactionRepository.findAll(userId);
   }
 
   findTotal(userId: number) {
@@ -78,7 +79,6 @@ export class TransactionService {
       }
       if (updateTransactionDto.tags) {
         item.tags = this.setupTagsForSave(transaction.userId, updateTransactionDto.tags);
-        console.log(item.tags);
       }
     });
 
