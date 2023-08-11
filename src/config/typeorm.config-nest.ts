@@ -21,6 +21,9 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       },
       synchronize: false,
       logging: true,
+      ssl: {
+        ca: process.env.SSL_CERT,
+      },
     };
   },
 };
