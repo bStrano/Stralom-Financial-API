@@ -1,6 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ENTITIES } from '../infra/database/entities';
+import * as fs from 'fs';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
@@ -20,8 +21,6 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       },
       synchronize: false,
       logging: true,
-      // TODO: Configure SSL for production
-      ssl: false, // Desativando SSL
     };
   },
 };
