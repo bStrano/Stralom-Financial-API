@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configurationService = app.get(ConfigService);
-  if (configurationService.get('NODE_ENV') !== 'local') {
+  if (configurationService.get('ENVINRONMENT') !== 'local') {
     app.enableCors({
       origin: [/.*\.stralom\.com$/],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
