@@ -20,6 +20,8 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       },
       synchronize: false,
       logging: true,
+      // TODO: Configure SSL for production
+      options: { encrypt: false },
     };
   },
 };
