@@ -9,6 +9,8 @@ import DateProviderInterface, { DATE_PROVIDER_TOKEN } from '../../../shared/prov
 import { DateUnitEnum } from '../../../shared/providers/date/constants/DateUnitEnum';
 import { Tag } from '../../tags/entities/tag.entity';
 import { CreateTagDto } from '../../tags/dtos/create-tag.dto';
+import { FindTransactionOptionalParamsDto } from '../dto/transaction/find-transaction-optional-params.dto';
+import { PageMetaDto } from '../../../shared/dtos/pagination/paginated-response.dto';
 
 @Injectable()
 export class TransactionService {
@@ -45,6 +47,18 @@ export class TransactionService {
 
   findAll(userId: number) {
     return this.transactionRepository.findAll(userId);
+  }
+
+  async findAllPaginated(userId: number, optionalParams: FindTransactionOptionalParamsDto) {
+    const [data, count] = await this.transactionRepository.findAll(userId, optionalParams);
+    return {
+      data,
+      meta: new PageMetaDto({
+        itemCount: count,
+        take: optionalParams?.take,
+        page: optionalParams?.page,
+      }),
+    };
   }
 
   findTotal(userId: number) {

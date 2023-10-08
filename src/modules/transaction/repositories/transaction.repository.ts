@@ -34,6 +34,7 @@ export class TransactionRepository {
   }
 
   async findAll(userId: number, optionalParams?: FindTransactionOptionalParamsDto) {
+    const skip = optionalParams?.page ? (optionalParams.page - 1) * optionalParams.take : undefined;
     const whereCondition: FindOptionsWhere<Transaction> | FindOptionsWhere<Transaction>[] | undefined = {
       userId,
     };
@@ -42,7 +43,7 @@ export class TransactionRepository {
       whereCondition.id = In(optionalParams.ids);
     }
 
-    return this.repository.find({ where: whereCondition, order: { date: 'DESC' } });
+    return this.repository.findAndCount({ where: whereCondition, order: { date: 'DESC' }, take: optionalParams?.take, skip });
   }
 
   async findAllByIdOrReferenceTransaction(id: string, referencedTransactionId?: string) {
