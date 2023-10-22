@@ -45,8 +45,9 @@ export class TransactionService {
     });
   }
 
-  findAll(userId: number) {
-    return this.transactionRepository.findAll(userId);
+  async findAll(userId: number) {
+    const [data] = await this.transactionRepository.findAll(userId);
+    return data;
   }
 
   async findAllPaginated(userId: number, optionalParams: FindTransactionOptionalParamsDto) {
