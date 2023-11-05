@@ -9,7 +9,7 @@ export class InvestmentRepository {
   constructor(@InjectRepository(Investment) private investmentRepository: Repository<Investment>) {}
 
   findAll(userId: number): Promise<Investment[]> {
-    return this.investmentRepository.find({ where: { userId }, order: { startDate: 'DESC' } });
+    return this.investmentRepository.find({ where: { userId }, order: { redemptionDate: 'DESC', startDate: 'DESC' } });
   }
 
   save(investment: Partial<Investment>): Promise<Investment | null> {
