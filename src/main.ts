@@ -13,6 +13,8 @@ async function bootstrap() {
       origin: [/.*\.stralom\.com$/],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     });
+  } else {
+    app.enableCors();
   }
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.setGlobalPrefix('/api/financial');
