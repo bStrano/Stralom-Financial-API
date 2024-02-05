@@ -96,6 +96,10 @@ export class TransactionStatisticsRepository {
       queryBuilder.addGroupBy(`date_part('day', transaction.date)`);
     }
 
+    if (optionalParams?.ignoredCategories) {
+      queryBuilder.andWhere(`transaction.categoryId NOT IN (:...ignoredCategories)`, { ignoredCategories: optionalParams.ignoredCategories });
+    }
+
     if (optionalParams?.ignoreInvestment) {
       queryBuilder.andWhere(`transaction.categoryId != :ignoredCategories`, { ignoredCategories: TransactionCategoryEnum.INVESTMENTS });
     }
@@ -109,4 +113,5 @@ interface CashFlowOptionalParams {
   groupByDay?: boolean;
   groupByType?: boolean;
   ignoreInvestment?: boolean;
+  ignoredCategories?: string[];
 }
