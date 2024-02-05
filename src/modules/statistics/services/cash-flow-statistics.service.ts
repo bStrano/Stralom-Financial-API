@@ -6,6 +6,7 @@ import { TransactionTypeEnum } from '@core/modules/transactions/enums/Transactio
 import { CashFlowByDayCompiled } from '../entities/CashFlowByDayCompiled';
 import { CashFlowSummaryInterface } from '@core/modules/statistics/CashFlowSummaryInterface';
 import { FilterOptionsDto } from '../dtos/FilterOptions.dto';
+import { TransactionCategoryEnum } from '@core/modules/transactions/enums/TransactionCategoryEnum';
 
 @Injectable()
 export class CashFlowStatisticsService {
@@ -63,6 +64,7 @@ export class CashFlowStatisticsService {
       dateFrom: optionalParams?.startDate ? optionalParams.startDate : startCurrentMonth,
       dateTo: optionalParams?.endDate ? optionalParams?.endDate : endCurrentMonth,
       type: TransactionTypeEnum.outComing,
+      ignoredCategories: [TransactionCategoryEnum.INVESTMENTS],
     });
   }
 }
